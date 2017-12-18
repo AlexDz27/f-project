@@ -40,7 +40,7 @@ export default class ExercisesSection extends Component<any, any> { //TODO: in-e
     componentWillMount() {
         this.loadExercisesDataFromServer()
     }
-    //todo: implement back, пока что тупо онклики буду ставить на ашки, а ваще нужен <Exercise onClick=...../>
+
     render() {
         const {exercisesFromServer} = this.state;
 

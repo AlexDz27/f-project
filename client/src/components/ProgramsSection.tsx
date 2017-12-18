@@ -11,6 +11,7 @@ import {Exercise, Program, UserData} from '../types/index'
 export interface IProgramsSectionStates {
     userExercises: Array<Exercise>
     userPrograms: Array<Program>
+    userProgramTitle: string
 }
 
 export interface IProgramsSectionProps {
@@ -25,7 +26,8 @@ export default class ProgramsSection extends Component<any, IProgramsSectionStat
 
         this.state = {
             userExercises: [],
-            userPrograms: []
+            userPrograms: [],
+            userProgramTitle: ''
         }
     }
 
@@ -55,7 +57,8 @@ export default class ProgramsSection extends Component<any, IProgramsSectionStat
         return(
             <div className="mb-15rem">
                 <h1>Мои программы</h1>
-                <h3>День груди</h3>
+                <input />
+                <br/>
                 {userExercises}
                 <button onClick={() => this.makeProgram()}>Сделать программу</button>
                 <ExercisesSection getExercise={(exercise: Exercise) => this.getExercise(exercise)} />
