@@ -4,7 +4,7 @@ import {Component} from "react";
 import "./components-styles/FitnessApp.css"
 import ExercisesSection from "./ExercisesSection";
 
-import {Exercise, Program} from '../types/index'
+import {Exercise, Program, UserData} from '../types/index'
 
 //TODO: deal with the same names for states in FitnessApp and ProgramsSection
 
@@ -13,7 +13,13 @@ export interface IProgramsSectionStates {
     userPrograms: Array<Program>
 }
 
-export default class ProgramsSection extends Component<any, IProgramsSectionStates> { //TODO: int-es for Header
+export interface IProgramsSectionProps {
+    userData?: UserData
+    userLoggedIn: boolean
+    userPrograms: Array<Program>
+}
+
+export default class ProgramsSection extends Component<any, IProgramsSectionStates> { //TODO: int for IProgramsSectionProps
     constructor(props: any) {
         super(props);
 
@@ -31,10 +37,8 @@ export default class ProgramsSection extends Component<any, IProgramsSectionStat
     }
 
     makeProgram() {
-        const newProgram: Program = new Program('Chest day',this.state.userExercises)
+        const newProgram: Program = new Program('Chest day', this.state.userExercises)
 
-        // const newProgram: any = this.state.userExercises; //todo: add proper type
-        // this.state.userPrograms.push(newProgram)
         this.setState({
             userPrograms: [...this.state.userPrograms, newProgram]
         })

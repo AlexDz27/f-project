@@ -9,7 +9,9 @@ import Profile from "./components/Profile";
 
 import axios from 'axios'
 
-import {IAppRouterStates} from './types/index'
+export interface IAppRouterStates {
+    doRedirect: boolean
+}
 
 export default class AppRouter extends Component<{}, IAppRouterStates> {
     constructor(props: any) {

@@ -22,48 +22,17 @@ export class Program {
 }
 /** /MODELS **/
 
-export interface IAppRouterStates {
-    doRedirect: boolean
-}
-
-
-export interface IFitnessAppProps {
-    doRedirect: boolean
-}
 
 
 
 
-export interface ISignUpProps {
-    doRedirect: boolean
-}
-
-export interface ISignUpStates {
-    newUserName: string
-    newUserEmail: string
-    newUserPassword: string
-    doRedirect: boolean
-}
-
-
-export interface ISignInProps {
-    doRedirect: boolean
-}
-
-export interface ISignInStates {
-    newUserNameCheck: string
-    newUserPasswordCheck: string
-    doRedirect: boolean
-}
-
-export interface IProgramsSectionProps {
-    userData: UserData
-    userLoggedIn: boolean
-    userPrograms: Array<Program>
-}
 
 
 
-export interface IProfile {
-    doRedirect: boolean
-}
+
+
+
+
+
+
+

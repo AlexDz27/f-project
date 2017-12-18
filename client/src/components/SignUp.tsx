@@ -5,9 +5,18 @@ import "./components-styles/Sign.css"
 import {Link} from "react-router-dom";
 
 import axios from "axios";
-
-import {ISignUpProps, ISignUpStates} from '../types/index'
 import {Redirect} from "react-router";
+
+export interface ISignUpProps {
+    doRedirect: boolean
+}
+
+export interface ISignUpStates {
+    newUserName: string
+    newUserEmail: string
+    newUserPassword: string
+    doRedirect: boolean
+}
 
 class NewUser {
     username: string

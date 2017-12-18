@@ -7,8 +7,6 @@ import {Link} from "react-router-dom";
 import axios from "axios";
 import {Redirect} from "react-router";
 
-import {ISignInProps, ISignInStates} from '../types/index'
-
 // class NewUserCheck {
 //     username: string
 //     password: string
@@ -19,7 +17,18 @@ import {ISignInProps, ISignInStates} from '../types/index'
 //     }
 // }
 
-export default class SignIn extends Component<ISignInProps, ISignInStates> { //TODO: remove these interfaces and add correct ones
+export interface ISignInProps {
+    doRedirect: boolean
+}
+
+export interface ISignInStates {
+    newUserNameCheck: string
+    newUserPasswordCheck: string
+    doRedirect: boolean
+}
+
+
+export default class SignIn extends Component<ISignInProps, ISignInStates> {
     constructor(props: any) {
         super(props);
 

@@ -8,15 +8,19 @@ import "./components-styles/FitnessApp.css"
 import axios from 'axios'
 import ProgramsSection from "./ProgramsSection";
 
-import {IFitnessAppProps, Program, UserData} from '../types/index'
+import {Program, UserData} from '../types/index'
+
+export interface IFitnessAppProps {
+    doRedirect: boolean
+}
 
 export interface IFitnessAppStates {
     userData?: UserData
     userLoggedIn: boolean
-    usersPrograms: Array<Program> //TODO: instead of object there should be model User
+    usersPrograms: Array<Program>
 }
 
-export default class FitnessApp extends Component<IFitnessAppProps, IFitnessAppStates> { //TODO: should be IFitenssAppStates and UserData
+export default class FitnessApp extends Component<IFitnessAppProps, IFitnessAppStates> {
     constructor(props: any) {
         super(props);
 

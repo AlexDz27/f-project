@@ -9,19 +9,13 @@ import {UserData} from "../types/index";
 // const LoginActionButton = (props: any) => props.action ? <a href={`/${props.action}`}>{props.action}</a> : null
 
 
-export interface IHeaderProps { //TODO: instead of object there should be model User
+export interface IHeaderProps {
     userData?: UserData
     userLoggedIn: boolean
 }
 
 export default class Header extends Component<IHeaderProps, {}> {
-    constructor(props: any) {
-        super(props);
-
-        //TODO: refactor D code
-    }
-    
-    handleLogout(e: any) { // todo: maybe no e??
+    handleLogout() {
         // e.preventDefault();
         
         // const usersToken = localStorage.getItem('token');
@@ -44,7 +38,7 @@ export default class Header extends Component<IHeaderProps, {}> {
                     {userLoggedIn && userData ? ` ${userData.username}` : " Anonymous"}
                 </span>
                 <div className="user-bar">
-                    {userLoggedIn ? <a onClick={(e: any) => this.handleLogout(e)} href="/">Sign out</a> : <div><a href="/signin">Sign in</a> <a href="/signup">Sign up</a></div>}
+                    {userLoggedIn ? <a onClick={() => this.handleLogout()} href="/">Sign out</a> : <div><a href="/signin">Sign in</a> <a href="/signup">Sign up</a></div>}
                     {/*<LoginActionButton onClick={(e: any) => this.handleLogout(e)} action={userLoggedIn ? 'signout' : 'signin'} />*/}
                     {/*<LoginActionButton action={!userLoggedIn ? 'register' : ''} />*/}
                     {/*<a onClick={(e: any) => this.handleLogout(e)} href="/logout">Log out my</a>*/}
