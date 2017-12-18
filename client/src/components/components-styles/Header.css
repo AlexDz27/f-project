@@ -1,0 +1,9 @@
+.Header {
+    display: flex;
+    justify-content: space-between;
+    padding: 30px 0;
+}
+
+.Header__initials {
+    font-size: 20px;
+}

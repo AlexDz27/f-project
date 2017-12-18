@@ -1,0 +1,13 @@
+.FitnessApp {
+    width: 900px;
+    margin: 0 auto;
+    border: 1px solid blue;
+}
+
+.mb-15rem {
+    margin-bottom: 15rem;
+}
+
+.mt-15rem {
+    margin-top: 15rem;
+}
