@@ -56,7 +56,7 @@ export const debugSignUp = ({ bodymen: { body } }, res, next) => { //bodymen -> 
 
 export const debugIsLoggedIn = (req, res, next) => {
   // console.log(req.body.token); // gets token, it works
-  User.findOne({token: req.body.token}, (err, user) => {
+  User.findOne({token: req.headers.token}, (err, user) => {
     if (err) throw err;
 
     if (!user) {

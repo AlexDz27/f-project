@@ -71,7 +71,7 @@ router.post('/',
   body({ email, password, username }),
   debugSignUp)
 
-router.post('/check',
+router.get('/check',
   debugIsLoggedIn)
 
 // /**

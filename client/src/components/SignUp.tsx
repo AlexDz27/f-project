@@ -8,7 +8,7 @@ import axios from "axios";
 import {Redirect} from "react-router";
 
 export interface ISignUpProps {
-    doRedirect: boolean
+    isLoggedIn: boolean
 }
 
 export interface ISignUpStates {
@@ -81,7 +81,7 @@ export default class SignUp extends Component<ISignUpProps, ISignUpStates> {
     }
 
     render() {
-        if (this.props.doRedirect) {
+        if (this.props.isLoggedIn) {
             return <Redirect to="/" />
         }
 

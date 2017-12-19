@@ -18,7 +18,7 @@ import {Redirect} from "react-router";
 // }
 
 export interface ISignInProps {
-    doRedirect: boolean
+    isLoggedIn: boolean
 }
 
 export interface ISignInStates {
@@ -71,7 +71,7 @@ export default class SignIn extends Component<ISignInProps, ISignInStates> {
     }
 
     render() {
-        if (this.props.doRedirect) {
+        if (this.props.isLoggedIn) {
             return <Redirect to="/" />
         }
 

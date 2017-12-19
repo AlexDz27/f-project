@@ -70,6 +70,7 @@ const router = express.Router();
 router.get('/all_programs', (req, res) => { /** Я ХЗ почему, но этот эднпоинт работает только если прямо здесь
  прописывать (req, res) - иначе выбивает ошибку Router.get() requires a callback function **/
   // todo: add admin role to get all the programs, not all users - пока так, чтобы легче проверять
+//todo: rewrite this crap via a separate func
   Program.find({}, (err, programs) => {
     if (err) return res.json(err);
 

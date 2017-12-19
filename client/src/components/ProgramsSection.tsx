@@ -68,6 +68,7 @@ export default class ProgramsSection extends Component<any, IProgramsSectionStat
         program.title = evt.target.value;
         this.setState({program});
     }
+    //TODO: REFACTOR UP
 
     render() {
         const {userPrograms, program: {exercises}} = this.state;

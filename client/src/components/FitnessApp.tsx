@@ -11,11 +11,11 @@ import ProgramsSection from "./ProgramsSection";
 import {Program, UserData} from '../types/index'
 
 export interface IFitnessAppProps {
-    doRedirect: boolean
+    isLoggedIn: boolean
 }
 
 export interface IFitnessAppStates {
-    userData?: UserData
+    userData?: UserData | any
     userLoggedIn: boolean
     usersPrograms: Array<Program>
 }
@@ -31,6 +31,7 @@ export default class FitnessApp extends Component<IFitnessAppProps, IFitnessAppS
         }
 
         this.checkIfLoggedIn = this.checkIfLoggedIn.bind(this);
+        this.loadProgramsFromServer = this.loadProgramsFromServer.bind(this)
     }
 
     checkIfLoggedIn() {
@@ -39,6 +40,7 @@ export default class FitnessApp extends Component<IFitnessAppProps, IFitnessAppS
         if (!usersToken) {
             return
         } else {
+            //TODO: rewrite to GET, not POST (по идее тупо config write i vsyo
             axios.request({url:'http://localhost:9000/api/users/check/',method:'post', data: {token: usersToken}})
                 .then((res: any) => {
                     console.log(res.data);
@@ -52,9 +54,25 @@ export default class FitnessApp extends Component<IFitnessAppProps, IFitnessAppS
         }
         // console.log(usersToken);
 
+    loadProgramsFromServer() { //TODO: how do i get over it???
+        if (!this.state.userData) {
+            return
+        } else {
+            axios.get(`http://localhost:9000/api/users/${this.state.userData._id}/my_programs`, {
+                'headers': {
+                    'Authorization': 'Bearer ' + this.state.userData.token
+                }
+            })
+                .then((responseData: any) => {
+                    console.log(responseData.data);
+                })
+        }
 
-    componentDidMount() {
+    }
+
+    componentWillMount() {
         this.checkIfLoggedIn();
+        this.loadProgramsFromServer()
     }
 
     render() {
@@ -63,7 +81,7 @@ export default class FitnessApp extends Component<IFitnessAppProps, IFitnessAppS
         // // let userLoggedIn;
         // Object.keys(userData).length === 0 ? this.setState({userLoggedIn: true}) : this.setState({userLoggedIn: false})
         // console.log(this.state.userLoggedIn);
-
+        //TODO: REFACTOR unneccessary props, remve them
         return(
             <div className="FitnessApp">
                 <Header userData={userData} userLoggedIn={userLoggedIn} />
