@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {Component} from "react";
 
-export default class Exercise extends Component<any, any> {
+export default class ExerciseItem extends Component<any, any> {
     handleClick(e: any) {
         e.preventDefault();
 

@@ -4,7 +4,9 @@ import {Component} from "react";
 import "./components-styles/FitnessApp.css"
 
 import axios from 'axios'
-import Exercise from "./Exercise";
+import ExerciseItem from "./ExerciseItem";
+
+import {Exercise} from '../types/index'
 
 
 export default class ExercisesSection extends Component<any, any> { //TODO: in-es
@@ -19,7 +21,7 @@ export default class ExercisesSection extends Component<any, any> { //TODO: in-e
         this.loadExercisesDataFromServer = this.loadExercisesDataFromServer.bind(this);
     }
 
-    getInfo(exercise: any) {
+    getInfo(exercise: Exercise) {
         // console.log(exercise);
         this.props.getExercise(exercise)
         // this.setState({
@@ -46,7 +48,7 @@ export default class ExercisesSection extends Component<any, any> { //TODO: in-e
 
         const exerciseItemTemplate = exercisesFromServer.map((exercise: any, index: number) => {
             return(
-                <Exercise onClick={(exercise: any) => this.getInfo(exercise)} key={index} exercise={exercise} />
+                <ExerciseItem onClick={(exercise: Exercise) => this.getInfo(exercise)} key={index} exercise={exercise} />
             )
         })
 

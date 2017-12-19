@@ -8,10 +8,11 @@ import {Exercise, Program, UserData} from '../types/index'
 
 //TODO: deal with the same names for states in FitnessApp and ProgramsSection
 
+import axios from 'axios'
+
 export interface IProgramsSectionStates {
-    userExercises: Array<Exercise>
+    program: Program,
     userPrograms: Array<Program>
-    userProgramTitle: string
 }
 
 export interface IProgramsSectionProps {
@@ -25,43 +26,68 @@ export default class ProgramsSection extends Component<any, IProgramsSectionStat
         super(props);
 
         this.state = {
-            userExercises: [],
+            program: {
+                title: '',
+                exercises: []
+            },
             userPrograms: [],
-            userProgramTitle: ''
         }
     }
 
     getExercise(exercise: Exercise) {
-        console.log(exercise);
-        this.setState({
-            userExercises: [...this.state.userExercises, exercise]
-        })
+        const {program} = this.state;
+        program.exercises.push(exercise);
+        this.setState({program});
+    }
+
+    removeExercise(exercise: Exercise) {
+        const {program} = this.state;
+        program.exercises = program.exercises.filter((item: Exercise) => {
+            return item._id !== exercise._id
+        });
+        this.setState({program})
     }
 
     makeProgram() {
-        const newProgram: Program = new Program('Chest day', this.state.userExercises)
-
-        this.setState({
-            userPrograms: [...this.state.userPrograms, newProgram]
+        const newProgram: Program = new Program(this.state.program.title, this.state.program.exercises)
+        axios.post(`http://localhost:9000/api/users/${this.props.userData._id}/my_programs`, newProgram, {
+            'headers': {
+                'Authorization': 'Bearer ' + this.props.userData.token
+            }
         })
+            .then((responseData: any) => {
+                this.setState({
+                    userPrograms: [...this.state.userPrograms, responseData.data]
+                })
+            })
+            .catch((err: any) => console.log(err))
+    }
+
+    updateProgramTitle(evt: any) {
+        const {program} = this.state;
+        program.title = evt.target.value;
+        this.setState({program});
     }
 
     render() {
-        let userExercises
-        if (!this.state.userExercises) {
-            return
-        } else {
-            userExercises = this.state.userExercises.map((item: Exercise, index: number) => <p key={index}>{item.title}</p>);
-        }
+        const {userPrograms, program: {exercises}} = this.state;
+        const exercisesHtml = exercises.map((exercise: Exercise, index: number) => <p
+            onClick={() => this.removeExercise(exercise)}>{exercise.title}</p>);
 
-        return(
+        return (
             <div className="mb-15rem">
                 <h1>Мои программы</h1>
-                <input />
+                <input value={this.state.program.title} onChange={evt => this.updateProgramTitle(evt)}/>
                 <br/>
-                {userExercises}
+                {exercisesHtml}
                 <button onClick={() => this.makeProgram()}>Сделать программу</button>
-                <ExercisesSection getExercise={(exercise: Exercise) => this.getExercise(exercise)} />
+                {/*{userPrograms.map((item: any, index: number) => <a href="#" key={index}>{item.title} - Посмотреть</a>)}*/}
+                {userPrograms.map((item: any, index: number) => <a href="#"
+                                                                   key={index}>{item.title} {item.exercises.map((item: any, index: number) => {
+                    return <a href="#">{item.title}</a>
+                })}</a>)}
+
+                <ExercisesSection getExercise={(exercise: Exercise) => this.getExercise(exercise)}/>
             </div>
         )
     }

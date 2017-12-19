@@ -141,7 +141,7 @@ export const createMyProgram = (req, res) => {
     } else {
       const newProgram = new Program({
         title: req.body.title,
-        content: req.body.content
+        exercises: req.body.exercises
       });
       newProgram.save(err => {
         if (err) res.json(err)
@@ -150,7 +150,8 @@ export const createMyProgram = (req, res) => {
       user.save(err => {
         if (err) res.json(err)
       });
-      res.json(user.programs)
+      // res.json(user.programs)
+      res.json(newProgram)
     }
     })
   }

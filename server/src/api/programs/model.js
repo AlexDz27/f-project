@@ -4,8 +4,8 @@ const programsSchema = new Schema({
   title: {
     type: String
   },
-  content: {
-    type: String
+  exercises: {
+    type: Array
   }
 }, {
   timestamps: true,
