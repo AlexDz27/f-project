@@ -154,7 +154,9 @@ export const createMyProgram = (req, res) => {
         if (err) res.json(err)
       });
       // res.json(user.programs)
-      res.json(newProgram)
+      // res.json(newProgram)
+      res.json(user)
+
     }
     })
   }

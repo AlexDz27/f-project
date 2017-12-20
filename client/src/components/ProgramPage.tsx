@@ -3,28 +3,39 @@ import {Component} from "react";
 // import {Redirect} from "react-router";
 
 import axios from 'axios'
+import {Exercise, Program} from "../types/index";
+import {Link} from "react-router-dom";
+import {Redirect} from "react-router";
 
 interface IProgramPageProps {
-    // params:any
-    // isLoggedIn: boolean
+    params: any
+    match: any
+    isLoggedIn: boolean
 }
 
-export default class ProgramPage extends Component<IProgramPageProps, any> {
+interface IProgramPageStates {
+    userProgram?: Program
+}
+
+export default class ProgramPage extends Component<IProgramPageProps, IProgramPageStates> {
     constructor(props: IProgramPageProps) {
         super(props);
+
+        this.state = {
+            userProgram: undefined
+        }
 
         this.getProgramFromServer = this.getProgramFromServer.bind(this);
     }
 
     getProgramFromServer() {
-        const url = window.location.href;
-        const id = url.substring(url.lastIndexOf('/') + 1)
-        console.log(id);
-        // console.log(this.props.params.id)
+        const id = this.props.match.params.id
 
         axios.get(`http://localhost:9000/api/programs/${id}`)
             .then((res: any) => {
-                console.log(res);
+                this.setState({
+                    userProgram: res.data
+                })
             })
     }
 
@@ -33,13 +44,29 @@ export default class ProgramPage extends Component<IProgramPageProps, any> {
     }
 
     render() {
+        if (!this.props.isLoggedIn) {
+            return <Redirect to="/" />
+        }
+
+        //TODO: see to isLoggedIn
         // if (!this.props.isLoggedIn) {
         //     return <Redirect to="/" />
         // }
+        const {userProgram} = this.state;
+        let exercisesTemplate;
+        {!userProgram ? console.log('') : exercisesTemplate = userProgram.exercises.map((item: Exercise) => {
+            return(
+                <li key={item._id}>{item.title}<br/><small>{item.content}</small></li>
+            )
+        })}
 
         return(
             <div>
-                one program page
+                {!userProgram ? <h1>Loading...</h1> : <h1>{userProgram.title}</h1>}
+                <ul>
+                    {exercisesTemplate}
+                </ul>
+                <Link to="/">Назад на главную</Link>
             </div>
         )
     }

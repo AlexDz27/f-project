@@ -6,21 +6,25 @@ import ExercisesSection from "./ExercisesSection";
 
 import {Exercise, Program, UserData} from '../types/index'
 
-//TODO: deal with the same names for states in FitnessApp and ProgramsConstructor
+//TODO: deal with the same names for states in FitnessApp and ProgramConstructor
 
 import axios from 'axios'
+import {getUserToken} from "../AppRouter";
+import {Redirect} from "react-router";
+import {Link} from "react-router-dom";
 
-export interface IProgramsConstructorStates {
+export interface IProgramConstructorStates {
     program: Program
     exercisesFromServer: any
+    redirectAfterMakeProgram: boolean
 }
 
-export interface IProgramsConstructorProps {
+export interface IProgramConstructorProps {
     userData?: UserData
     exercisesFromServer: Array<Exercise>
 }
 
-export default class ProgramsConstructor extends Component<any, IProgramsConstructorStates> { //TODO: int for IProgramsSectionProps
+export default class ProgramConstructor extends Component<any, IProgramConstructorStates> { //TODO: int for IProgramsSectionProps
     constructor(props: any) {
         super(props);
         this.state = {
@@ -28,7 +32,8 @@ export default class ProgramsConstructor extends Component<any, IProgramsConstru
                 title: '',
                 exercises: [],
             },
-            exercisesFromServer: []
+            exercisesFromServer: [],
+            redirectAfterMakeProgram: false
         }
 
         // this.updateUserProgramsBeforeMount = this.updateUserProgramsBeforeMount.bind(this)
@@ -50,12 +55,18 @@ export default class ProgramsConstructor extends Component<any, IProgramsConstru
     }
 
     makeProgram() {
+        const userToken = getUserToken()
         const newProgram: Program = new Program(this.state.program.title, this.state.program.exercises)
         axios.post(`http://localhost:9000/api/users/${this.props.userData._id}/my_programs`, newProgram, {
             'headers': {
-                'Authorization': 'Bearer ' + this.props.userData.token
+                'Authorization': 'Bearer ' + userToken
             }
         })
+            .then((res: any) => this.props.onAddProgram(res.data))
+            .then(() => alert(`Ваша программа ${this.state.program.title} успешно добавлена!`))
+            .then(() => this.setState({
+                redirectAfterMakeProgram: true
+            }))
             .catch((err: any) => console.log(err))
     }
 
@@ -90,6 +101,14 @@ export default class ProgramsConstructor extends Component<any, IProgramsConstru
     }
 
     render() {
+        if (!this.props.isLoggedIn) {
+            return <Redirect to="/" />
+        }
+
+        if (this.state.redirectAfterMakeProgram) {
+            return <Redirect to="/" />
+        }
+
         const {program: {exercises}, exercisesFromServer} = this.state;
 
         const exercisesHtml = exercises.map((exercise: Exercise, index: number) => <p
@@ -100,10 +119,11 @@ export default class ProgramsConstructor extends Component<any, IProgramsConstru
 
         return (
             <div className="mb-15rem">
-                <input value={this.state.program.title} onChange={evt => this.updateProgramTitle(evt)}/>
+                <input style={{width: "400px"}} value={this.state.program.title} placeholder="Введите имя программы" onChange={evt => this.updateProgramTitle(evt)}/>
                 <br/>
                 {exercisesHtml}
-                <button onClick={() => this.makeProgram()}>Сделать программу</button>
+                <button onClick={() => this.makeProgram()}>Сделать программу</button><br/>
+                <Link to="/">Назад на главную</Link>
                 {/*{userPrograms.map((item: any, index: number) => <a href="#" key={index}>{item.title} - Посмотреть</a>)}*/}
                 {/*{titles}*/}
                 <ExercisesSection exercisesFromServer={exercisesFromServer}

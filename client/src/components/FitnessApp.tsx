@@ -5,7 +5,7 @@ import Header from "./Header"
 
 import "./components-styles/FitnessApp.css"
 
-import { UserData} from '../types/index'
+import {Program, UserData} from '../types/index'
 import {Link} from "react-router-dom";
 
 export interface IFitnessAppProps {
@@ -34,11 +34,11 @@ export default class FitnessApp extends Component<IFitnessAppProps, IFitnessAppS
         //     .map((program: any) => <h3>{program.title}</h3>)
         //     .reduce(prev: any, curr: any) => [prev, ', ', curr])
         let titles;
-        if (isLoggedIn) {
+        if (isLoggedIn && Object.keys(userData).length > 0) {
             titles = userData.programs
-                .map((program: any) => <Link key={program._id} style={{fontSize: '44px', display: 'block'}} to={`/programs/${program._id}`}>{program.title}</Link>)
+                .map((program: Program) => <Link key={program._id} style={{fontSize: '44px', display: 'block'}} to={`/programs/${program._id}`}>{program.title}</Link>)
         } else {
-            titles = <h3>Кажется, у вас нет программ!</h3>
+            titles = <h3>Кажется, у вас нет программ! <Link to="/signup">Зарегистрируйтесь!</Link></h3>
         }
 
 
@@ -49,7 +49,7 @@ export default class FitnessApp extends Component<IFitnessAppProps, IFitnessAppS
                 {/*{userData.programs.length == 0 ? <h1>It appears that u have no progs</h1> : <h1>u have some progs</h1>}*/}
                 {/*{userLoggedIn ? <ExercisesSection/> : null}*/}
                 {titles}
-                <Link to="/programs_constructor">Сделать программу</Link>
+                <Link to="/program_constructor">Сделать программу</Link>
             </div>
         )
     }

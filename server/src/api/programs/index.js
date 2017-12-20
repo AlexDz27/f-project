@@ -77,6 +77,11 @@ router.get('/', showAllPrograms)
  */
 router.get('/:id', showOneProgram)
 
+/**
+ * POST /programs/:id
+ * Update one program for the user
+ */
+
 //
 // /**
 //  * @api {put} /programs/:id Update programs

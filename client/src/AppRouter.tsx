@@ -9,8 +9,14 @@ import FitnessApp from "./components/FitnessApp";
 import axios from 'axios'
 
 import {UserData} from './types/index'
-import ProgramsConstructor from "./components/ProgramsConstructor";
+import ProgramConstructor from "./components/ProgramConstructor";
 import ProgramPage from "./components/ProgramPage";
+
+
+export function getUserToken() {
+    const storage = window.localStorage;
+    return storage.getItem("token");
+}
 
 export interface IAppRouterStates {
     userData?: UserData | any
@@ -29,13 +35,21 @@ export default class AppRouter extends Component<{}, IAppRouterStates> {
 
         this.getUserData = this.getUserData.bind(this);
         // this.loadProgramsFromServer = this.loadProgramsFromServer.bind(this);
+        this.checkIfLoggedIn = this.checkIfLoggedIn.bind(this);
+    }
 
+    checkIfLoggedIn() {
+        const userToken = getUserToken();
+        if (userToken) {
+            this.setState({
+                isLoggedIn: true
+            })
+        }
     }
 
     getUserData() {
-        const storage = window.localStorage;
-        const usersToken = storage.getItem("token");
-        if (!usersToken) {
+        const userToken = getUserToken();
+        if (!userToken) {
             return
         } else {
             // axios.request({url: 'http://localhost:9000/api/users/check/', method: 'post', data: {token: usersToken}})
@@ -49,15 +63,15 @@ export default class AppRouter extends Component<{}, IAppRouterStates> {
             // debugger
             axios.get('http://localhost:9000/api/users/check/', {
                 'headers': {
-                    'Authorization': 'Bearer ' + usersToken
+                    'Authorization': 'Bearer ' + userToken
                 }
             })
 
             .then((res: any) => {
                 console.log(res.data);
                 this.setState({
-                    isLoggedIn: true,
-                    userData: res.data
+                    userData: res.data,
+                    isLoggedIn: true
                 })
             })
             .catch((err: any) => console.log(err))
@@ -71,9 +85,15 @@ export default class AppRouter extends Component<{}, IAppRouterStates> {
         })
     }
 
-
+    logNewUserDataAfterMakeProgram(newUserData: UserData) {
+        this.setState({
+            userData: newUserData
+        })
+    }
+    
     componentWillMount() {
         this.getUserData();
+        this.checkIfLoggedIn();
         // this.loadProgramsFromServer();
         // setTimeout(this.loadProgramsFromServer, 2000) /** а через сетТаймаут работает**/
     }
@@ -91,6 +111,8 @@ export default class AppRouter extends Component<{}, IAppRouterStates> {
             console.log('user aint got a token');
         }
         
+        console.log(userData.programs);
+        
 
         return(
             <BrowserRouter>
@@ -101,9 +123,9 @@ export default class AppRouter extends Component<{}, IAppRouterStates> {
 
                     <Route exact={true} path="/signin" render={() => <SignIn getUserDataFromSignIn={(res: any) => this.getUserDataFromSignIn(res)} isLoggedIn={isLoggedIn} />} />
 
-                    <Route exact={true} path="/programs_constructor" render={() => <ProgramsConstructor userData={userData} isLoggedIn={isLoggedIn} />} />
+                    <Route exact={true} path="/program_constructor" render={() => <ProgramConstructor onAddProgram={(newUserData: UserData) => this.logNewUserDataAfterMakeProgram(newUserData)} userData={userData} isLoggedIn={isLoggedIn} />} />
 
-                    <Route exact={true} path="/programs/:id" render={() => <ProgramPage  />} />
+                    <Route exact={true} path="/programs/:id" render={(props: any) => <ProgramPage isLoggedIn={isLoggedIn} {...props} />} />
 
                     <Route exact={true} path="*" render={() => <h1>404 page not found (route for a page)</h1>} />
                 </Switch>
