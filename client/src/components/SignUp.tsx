@@ -85,6 +85,10 @@ export default class SignUp extends Component<ISignUpProps, ISignUpStates> {
             return <Redirect to="/" />
         }
 
+        if (this.state.doRedirect) {
+            return <Redirect to="/signin"/>
+        }
+
         return(
             <div className="SignUp">
                 <div className="container">

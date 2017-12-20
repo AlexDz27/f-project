@@ -66,6 +66,7 @@ export default class ProgramPage extends Component<IProgramPageProps, IProgramPa
                 <ul>
                     {exercisesTemplate}
                 </ul>
+                <a style={{color: "red"}} href="#">Удалить программу</a><br/>
                 <Link to="/">Назад на главную</Link>
             </div>
         )

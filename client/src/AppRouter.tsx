@@ -52,15 +52,6 @@ export default class AppRouter extends Component<{}, IAppRouterStates> {
         if (!userToken) {
             return
         } else {
-            // axios.request({url: 'http://localhost:9000/api/users/check/', method: 'post', data: {token: usersToken}})
-            //     .then((res: any) => {
-            //         this.setState({
-            //             isLoggedIn: true,
-            //             userData: res.data
-            //         })
-            //     })
-            //     .catch((err: any) => console.log(err))
-            // debugger
             axios.get('http://localhost:9000/api/users/check/', {
                 'headers': {
                     'Authorization': 'Bearer ' + userToken
@@ -85,10 +76,12 @@ export default class AppRouter extends Component<{}, IAppRouterStates> {
         })
     }
 
-    logNewUserDataAfterMakeProgram(newUserData: UserData) {
+    getNewUserDataAfterMakeProgram(newUserData: UserData) {
+        console.log(newUserData);
         this.setState({
             userData: newUserData
         })
+        this.getUserData();
     }
     
     componentWillMount() {
@@ -101,18 +94,14 @@ export default class AppRouter extends Component<{}, IAppRouterStates> {
     render() {
 
         const {isLoggedIn, userData} = this.state;
-        
-        const token = localStorage.getItem('token')
-        console.log(token);
-        
-        if (token) {
-            console.log('user got token');
-        } else {
-            console.log('user aint got a token');
-        }
-        
-        console.log(userData.programs);
-        
+            //TODO: see to removeing token, need promises probably, or just leave it as is.............
+/*        if (isLoggedIn && Object.keys(userData).length === 0) {
+            localStorage.removeItem("token")
+            this.setState({
+                isLoggedIn: false
+            })
+        }*/
+
 
         return(
             <BrowserRouter>
@@ -123,7 +112,7 @@ export default class AppRouter extends Component<{}, IAppRouterStates> {
 
                     <Route exact={true} path="/signin" render={() => <SignIn getUserDataFromSignIn={(res: any) => this.getUserDataFromSignIn(res)} isLoggedIn={isLoggedIn} />} />
 
-                    <Route exact={true} path="/program_constructor" render={() => <ProgramConstructor onAddProgram={(newUserData: UserData) => this.logNewUserDataAfterMakeProgram(newUserData)} userData={userData} isLoggedIn={isLoggedIn} />} />
+                    <Route exact={true} path="/program_constructor" render={() => <ProgramConstructor onAddProgram={(newUserData: UserData) => this.getNewUserDataAfterMakeProgram(newUserData)} userData={userData} isLoggedIn={isLoggedIn} />} />
 
                     <Route exact={true} path="/programs/:id" render={(props: any) => <ProgramPage isLoggedIn={isLoggedIn} {...props} />} />
 

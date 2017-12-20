@@ -20,7 +20,6 @@ export default class Header extends Component<IHeaderProps, {}> {
         
         // const usersToken = localStorage.getItem('token');
         localStorage.removeItem('token')
-        console.log(localStorage.getItem('token'));
     }
 
 

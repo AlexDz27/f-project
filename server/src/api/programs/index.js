@@ -5,10 +5,10 @@
 // import { schema } from './model'
 // import {query} from "express";
 // import index from "../../services/express/index";
-// import {token} from "../../services/passport/index";
+import {token} from "../../services/passport/index";
 // export Programs, { schema } from './model'
 
-import {showAllPrograms, showOneProgram} from "./controller";
+import {deleteOneProgram, showAllPrograms, showOneProgram} from "./controller";
 
 const programsController = require('./controller')
 const Program = require('./model');
@@ -75,12 +75,18 @@ router.get('/', showAllPrograms)
  * GET /programs/:id
  * Get one program for the user
  */
-router.get('/:id', showOneProgram)
+router.get('/:id',
+  token({required: true}), //чисто проверить..
+  showOneProgram)
 
 /**
- * POST /programs/:id
- * Update one program for the user
+ * DELETE /programs/:id
+ * Delete one program for the user
  */
+router.delete('/:id',
+  token({required: true}),
+  deleteOneProgram)
+//todo: add token({required: true})
 
 //
 // /**

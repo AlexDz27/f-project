@@ -38,8 +38,16 @@ export default class FitnessApp extends Component<IFitnessAppProps, IFitnessAppS
             titles = userData.programs
                 .map((program: Program) => <Link key={program._id} style={{fontSize: '44px', display: 'block'}} to={`/programs/${program._id}`}>{program.title}</Link>)
         } else {
-            titles = <h3>Кажется, у вас нет программ! <Link to="/signup">Зарегистрируйтесь!</Link></h3>
+            titles = <h3>Кажется, вас нет в системе! <Link to="/signup">Зарегистрируйтесь </Link>или <Link to="/signin">залогиньтесь!</Link></h3>
         }
+
+        let makeProgramMsg;
+        if (Object.keys(userData).length > 0) {
+            if (Object.keys(userData.programs).length === 0) {
+                makeProgramMsg =  <h4>У вас нет программ! Самое время сделать новую!</h4>
+            }
+        }
+
 
 
         return(
@@ -49,6 +57,7 @@ export default class FitnessApp extends Component<IFitnessAppProps, IFitnessAppS
                 {/*{userData.programs.length == 0 ? <h1>It appears that u have no progs</h1> : <h1>u have some progs</h1>}*/}
                 {/*{userLoggedIn ? <ExercisesSection/> : null}*/}
                 {titles}
+                {makeProgramMsg}
                 <Link to="/program_constructor">Сделать программу</Link>
             </div>
         )

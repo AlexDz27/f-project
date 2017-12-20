@@ -142,6 +142,7 @@ export const createMyProgram = (req, res) => {
     if (!user) {
       res.json('User not found')
     } else {
+      console.log(req.body);
       const newProgram = new Program({
         title: req.body.title,
         exercises: req.body.exercises
@@ -149,12 +150,14 @@ export const createMyProgram = (req, res) => {
       newProgram.save(err => {
         if (err) res.json(err)
       });
-      user.programs.push(newProgram); //ADDING THE PROGRAM TO THE USER'S ACCOUNT
+      // console.log(newProgram)
+      user.programs.push(newProgram); //ADDING THE PROGRAM TO THE USER'S ACCOUNT - pohody iz-za etogo... a hotya...
       user.save(err => {
         if (err) res.json(err)
       });
       // res.json(user.programs)
       // res.json(newProgram)
+      // console.log(user)
       res.json(user)
 
     }
