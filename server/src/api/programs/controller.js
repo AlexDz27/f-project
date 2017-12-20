@@ -43,19 +43,20 @@ export const destroy = ({ params }, res, next) =>
     .catch(next)
 
 /** MY CODE **/
-// export const show = ({ params }, res, next) =>
-//   Programs.findById(params.id)
-//     .then(notFound(res))
-//     .then((programs) => programs ? programs.view() : null)
-//     .then(success(res))
-//     .catch(next)
-//
+export const showOneProgram = ({ params }, res, next) =>
+  Program.findById(params.id, (err, program) => {
+    if (err) return res.json(err)
 
-// exports.show = (req, res) => {
-//   Program.find({}, (err, programs) => {
-//     if (err) return res.json(err);
-//
-//     res.json(programs);
-//   })
-// };
+    console.log(program);
+    res.json(program)
+  })
+
+
+exports.showAllPrograms = (req, res) => {
+  Program.find({}, (err, programs) => {
+    if (err) return res.json(err);
+
+    res.json(programs);
+  })
+};
 

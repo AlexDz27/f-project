@@ -19,6 +19,7 @@ import {Redirect} from "react-router";
 
 export interface ISignInProps {
     isLoggedIn: boolean
+    getUserDataFromSignIn: Function
 }
 
 export interface ISignInStates {
@@ -61,6 +62,8 @@ export default class SignIn extends Component<ISignInProps, ISignInStates> {
         }})
         .then((res: any) => {
             console.log(res);
+            this.props.getUserDataFromSignIn(res.data)
+            console.log(res.data);
             const token = res.data.token;
             localStorage.setItem('token', token);
             this.setState({

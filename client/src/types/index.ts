@@ -2,6 +2,7 @@
 export interface UserData {
     email: string
     username: string
+    programs: Array<Program>
 }
 
 export interface Exercise {
@@ -11,6 +12,7 @@ export interface Exercise {
 }
 
 export class Program {
+    public _id?: string
     public title: string
     public exercises: Array<Exercise>
 

@@ -8,6 +8,8 @@
 // import {token} from "../../services/passport/index";
 // export Programs, { schema } from './model'
 
+import {showAllPrograms, showOneProgram} from "./controller";
+
 const programsController = require('./controller')
 const Program = require('./model');
 
@@ -63,20 +65,17 @@ const router = express.Router();
 //  * @apiError 401 master access only.
 //  */
 /**
- * GET /programs/all_programs
+ * GET /programs
  * Get all programs from all users
  */
+//todo: add admin role to get all the programs, not all users - пока так, чтобы легче проверять
+router.get('/', showAllPrograms)
 
-router.get('/all_programs', (req, res) => { /** Я ХЗ почему, но этот эднпоинт работает только если прямо здесь
- прописывать (req, res) - иначе выбивает ошибку Router.get() requires a callback function **/
-  // todo: add admin role to get all the programs, not all users - пока так, чтобы легче проверять
-//todo: rewrite this crap via a separate func
-  Program.find({}, (err, programs) => {
-    if (err) return res.json(err);
-
-    res.json(programs)
-  })
-})
+/**
+ * GET /programs/:id
+ * Get one program for the user
+ */
+router.get('/:id', showOneProgram)
 
 //
 // /**

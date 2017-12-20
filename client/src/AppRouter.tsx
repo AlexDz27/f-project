@@ -7,9 +7,10 @@ import SignUp from "./components/SignUp";
 import FitnessApp from "./components/FitnessApp";
 
 import axios from 'axios'
-import ProgramConstructor from "./components/ProgramConstructor";
 
 import {UserData} from './types/index'
+import ProgramsConstructor from "./components/ProgramsConstructor";
+import ProgramPage from "./components/ProgramPage";
 
 export interface IAppRouterStates {
     userData?: UserData | any
@@ -25,59 +26,84 @@ export default class AppRouter extends Component<{}, IAppRouterStates> {
             isLoggedIn: false,
             userData: {}
         }
+
+        this.getUserData = this.getUserData.bind(this);
+        // this.loadProgramsFromServer = this.loadProgramsFromServer.bind(this);
+
     }
 
     getUserData() {
         const storage = window.localStorage;
         const usersToken = storage.getItem("token");
-        console.log(usersToken);
         if (!usersToken) {
             return
         } else {
             // axios.request({url: 'http://localhost:9000/api/users/check/', method: 'post', data: {token: usersToken}})
             //     .then((res: any) => {
-            //         console.log(res.data);
             //         this.setState({
             //             isLoggedIn: true,
             //             userData: res.data
             //         })
             //     })
             //     .catch((err: any) => console.log(err))
+            // debugger
             axios.get('http://localhost:9000/api/users/check/', {
                 'headers': {
-                    'Authorization': 'Bearer ' + this.state.userData.token
+                    'Authorization': 'Bearer ' + usersToken
                 }
             })
-                .then((res: any) => {
-                    console.log(res.data);
-                    this.setState({
-                        isLoggedIn: true,
-                        userData: res.data
-                    })
+
+            .then((res: any) => {
+                console.log(res.data);
+                this.setState({
+                    isLoggedIn: true,
+                    userData: res.data
                 })
-                .catch((err: any) => console.log(err))
+            })
+            .catch((err: any) => console.log(err))
         }
     }
 
+    getUserDataFromSignIn(res: any) {
+        this.setState({
+            isLoggedIn: true,
+            userData: res.user
+        })
+    }
+
+
     componentWillMount() {
         this.getUserData();
+        // this.loadProgramsFromServer();
+        // setTimeout(this.loadProgramsFromServer, 2000) /** а через сетТаймаут работает**/
     }
 
     render() {
 
-        const {isLoggedIn} = this.state;
+        const {isLoggedIn, userData} = this.state;
+        
+        const token = localStorage.getItem('token')
+        console.log(token);
+        
+        if (token) {
+            console.log('user got token');
+        } else {
+            console.log('user aint got a token');
+        }
+        
 
         return(
             <BrowserRouter>
                 <Switch>
-                    {/*TODO: make a page for showing one particular program*/}
-                    <Route exact={true} path="/" render={() => <FitnessApp isLoggedIn={isLoggedIn} />} />
+                    <Route exact={true} path="/" render={() => <FitnessApp isLoggedIn={isLoggedIn} userData={userData} />} />
 
                     <Route exact={true} path="/signup" render={() => <SignUp isLoggedIn={isLoggedIn} />} />
 
-                    <Route exact={true} path="/signin" render={() => <SignIn isLoggedIn={isLoggedIn} />} />
+                    <Route exact={true} path="/signin" render={() => <SignIn getUserDataFromSignIn={(res: any) => this.getUserDataFromSignIn(res)} isLoggedIn={isLoggedIn} />} />
 
-                    <Route exact={true} path="/program_constructor" render={() => <ProgramConstructor isLoggedIn={isLoggedIn} />} />
+                    <Route exact={true} path="/programs_constructor" render={() => <ProgramsConstructor userData={userData} isLoggedIn={isLoggedIn} />} />
+
+                    <Route exact={true} path="/programs/:id" render={() => <ProgramPage  />} />
 
                     <Route exact={true} path="*" render={() => <h1>404 page not found (route for a page)</h1>} />
                 </Switch>

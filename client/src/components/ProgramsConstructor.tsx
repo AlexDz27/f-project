@@ -6,32 +6,33 @@ import ExercisesSection from "./ExercisesSection";
 
 import {Exercise, Program, UserData} from '../types/index'
 
-//TODO: deal with the same names for states in FitnessApp and ProgramsSection
+//TODO: deal with the same names for states in FitnessApp and ProgramsConstructor
 
 import axios from 'axios'
 
-export interface IProgramsSectionStates {
-    program: Program,
-    userPrograms: Array<Program>
+export interface IProgramsConstructorStates {
+    program: Program
+    exercisesFromServer: any
 }
 
-export interface IProgramsSectionProps {
+export interface IProgramsConstructorProps {
     userData?: UserData
-    userLoggedIn: boolean
-    userPrograms: Array<Program>
+    exercisesFromServer: Array<Exercise>
 }
 
-export default class ProgramsSection extends Component<any, IProgramsSectionStates> { //TODO: int for IProgramsSectionProps
+export default class ProgramsConstructor extends Component<any, IProgramsConstructorStates> { //TODO: int for IProgramsSectionProps
     constructor(props: any) {
         super(props);
-
         this.state = {
             program: {
                 title: '',
-                exercises: []
+                exercises: [],
             },
-            userPrograms: [],
+            exercisesFromServer: []
         }
+
+        // this.updateUserProgramsBeforeMount = this.updateUserProgramsBeforeMount.bind(this)
+        this.loadExercisesDataFromServer = this.loadExercisesDataFromServer.bind(this);
     }
 
     getExercise(exercise: Exercise) {
@@ -55,11 +56,6 @@ export default class ProgramsSection extends Component<any, IProgramsSectionStat
                 'Authorization': 'Bearer ' + this.props.userData.token
             }
         })
-            .then((responseData: any) => {
-                this.setState({
-                    userPrograms: [...this.state.userPrograms, responseData.data]
-                })
-            })
             .catch((err: any) => console.log(err))
     }
 
@@ -68,27 +64,50 @@ export default class ProgramsSection extends Component<any, IProgramsSectionStat
         program.title = evt.target.value;
         this.setState({program});
     }
-    //TODO: REFACTOR UP
+
+    loadExercisesDataFromServer() {
+        axios.get("http://localhost:9000/api/exercises")
+            .then((res: any) => {
+                this.setState({
+                    exercisesFromServer: res.data
+                })
+            })
+            .catch((err: any) => console.log(err))
+    }
+
+    /*    updateUserProgramsBeforeMount() {
+            this.setState({
+                userPrograms: [...this.state.userPrograms, this.props.userData.programs]
+            })
+        }
+
+        componentWillMount() {
+            this.updateUserProgramsBeforeMount()
+        }*/
+
+    componentWillMount() {
+        this.loadExercisesDataFromServer()
+    }
 
     render() {
-        const {userPrograms, program: {exercises}} = this.state;
+        const {program: {exercises}, exercisesFromServer} = this.state;
+
         const exercisesHtml = exercises.map((exercise: Exercise, index: number) => <p
             onClick={() => this.removeExercise(exercise)}>{exercise.title}</p>);
 
+        // const titles = this.props.userData.programs
+        //     .map((program: any) => <h3>{program.title}</h3>)
+
         return (
             <div className="mb-15rem">
-                <h1>Мои программы</h1>
                 <input value={this.state.program.title} onChange={evt => this.updateProgramTitle(evt)}/>
                 <br/>
                 {exercisesHtml}
                 <button onClick={() => this.makeProgram()}>Сделать программу</button>
                 {/*{userPrograms.map((item: any, index: number) => <a href="#" key={index}>{item.title} - Посмотреть</a>)}*/}
-                {userPrograms.map((item: any, index: number) => <a href="#"
-                                                                   key={index}>{item.title} {item.exercises.map((item: any, index: number) => {
-                    return <a href="#">{item.title}</a>
-                })}</a>)}
-
-                <ExercisesSection getExercise={(exercise: Exercise) => this.getExercise(exercise)}/>
+                {/*{titles}*/}
+                <ExercisesSection exercisesFromServer={exercisesFromServer}
+                                  getExercise={(exercise: Exercise) => this.getExercise(exercise)}/>
             </div>
         )
     }

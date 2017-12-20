@@ -11,7 +11,7 @@ import {UserData} from "../types/index";
 
 export interface IHeaderProps {
     userData?: UserData
-    userLoggedIn: boolean
+    isLoggedIn: boolean
 }
 
 export default class Header extends Component<IHeaderProps, {}> {
@@ -25,20 +25,21 @@ export default class Header extends Component<IHeaderProps, {}> {
 
 
     render() {
-        const {userData, userLoggedIn} = this.props;
+        const {userData, isLoggedIn} = this.props;
 
         // let userLoggedIn;
         // Object.keys(userData).length === 0 ? userLoggedIn = false : userLoggedIn = true
         // console.log(userLoggedIn);
 
         return(
-            <header className="Header">
+            <header className="Header header">
+                <img src="../../public/img/Capture.PNG" alt=""/>
                 <span className="Header__initials">Fitness App</span>
                 <span className="Header__initials">Welcome,
-                    {userLoggedIn && userData ? ` ${userData.username}` : " Anonymous"}
+                    {isLoggedIn && userData ? ` ${userData.username}` : " Anonymous"}
                 </span>
                 <div className="user-bar">
-                    {userLoggedIn ? <a onClick={() => this.handleLogout()} href="/">Sign out</a> : <div><a href="/signin">Sign in</a> <a href="/signup">Sign up</a></div>}
+                    {isLoggedIn ? <a onClick={() => this.handleLogout()} href="/">Sign out</a> : <div><a href="/signin">Sign in</a> <a href="/signup">Sign up</a></div>}
                     {/*<LoginActionButton onClick={(e: any) => this.handleLogout(e)} action={userLoggedIn ? 'signout' : 'signin'} />*/}
                     {/*<LoginActionButton action={!userLoggedIn ? 'register' : ''} />*/}
                     {/*<a onClick={(e: any) => this.handleLogout(e)} href="/logout">Log out my</a>*/}

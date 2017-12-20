@@ -40,6 +40,14 @@ router.get('/me',
   token({ required: true }),
   showMe)
 
+router.get('/check',
+  token({ required: true }),
+  function(req, res, next){
+  const {_id,email, username, programs} = req.user;
+    return res.json({_id,email, username, programs});
+  },
+  )
+
 /**
  * @api {get} /users/:id Retrieve user
  * @apiName RetrieveUser
@@ -49,6 +57,7 @@ router.get('/me',
  * @apiError 404 User not found.
  */
 router.get('/:id',
+  token({ required: true }),
   show)
 
 /**
@@ -71,8 +80,7 @@ router.post('/',
   body({ email, password, username }),
   debugSignUp)
 
-router.get('/check',
-  debugIsLoggedIn)
+
 
 // /**
 //  * @api {put} /users/:id Update user
@@ -138,5 +146,13 @@ router.post('/:id/my_programs',
 router.get('/:id/my_programs',
   token({required: true}),
   showMyPrograms)
+
+// /**
+//  * GET /:id/my_programs/:id (of the program)
+//  * Get one program for the user
+//  */
+// router.get('/:id/my_programs/:id', //-??????????????????????????????????????????????? как тут два айдишника различать??? чтобы достучаться до проги юзера
+//   token({required: true}),
+//   showMyPrograms)
 
 export default router

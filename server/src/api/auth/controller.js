@@ -9,7 +9,7 @@ export const login = ({user}, res, next) => {
       token = tokenValue;
       return User.update({_id: user.id}, {token});
     })
-    .then(()=>({token, user: user.view()}))
+    .then(()=>({token, user: user}))
     .then(success(res, 201))
     // .then(res.redirect("http://localhost:3000"))
     .catch(next);

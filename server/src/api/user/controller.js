@@ -56,6 +56,8 @@ export const debugSignUp = ({ bodymen: { body } }, res, next) => { //bodymen -> 
 
 export const debugIsLoggedIn = (req, res, next) => {
   // console.log(req.body.token); // gets token, it works
+  // const tokenValue = req.headers.authorization.substring(6);
+  // console.log(tokenValue);
   User.findOne({token: req.headers.token}, (err, user) => {
     if (err) throw err;
 
@@ -66,6 +68,7 @@ export const debugIsLoggedIn = (req, res, next) => {
       res.send(user)
     }
   })
+  console.log(req.headers);
 }
 
 // export const logOut = (req, res, next) => {

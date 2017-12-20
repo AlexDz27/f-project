@@ -12,7 +12,7 @@ export default class Profile extends Component<any, any> { //TODO: add appropria
         if (!this.props.doRedirect) {
             return <Redirect to="/" />
         }
-
+        //TODO: mb ne nuzhen mne dazhe profile etot... u menya vsyo v FApp
         return(
             <h2>User's anonym profile</h2>
         )
