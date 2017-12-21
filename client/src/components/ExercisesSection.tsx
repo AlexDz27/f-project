@@ -23,7 +23,7 @@ export default class ExercisesSection extends Component<any, any> { //TODO: in-e
         })
 
         return(
-            <div className="mt-15rem">
+            <div>
                 <h1>Упражнения</h1>
                 <ul>
                     {exerciseItemTemplate}

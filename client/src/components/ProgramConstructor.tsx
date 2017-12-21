@@ -8,7 +8,7 @@ import {Exercise, Program, UserData} from '../types/index'
 
 import axios from 'axios'
 import {getUserToken} from "../AppRouter";
-import {Redirect} from "react-router";
+import {Redirect, Route} from "react-router";
 import {Link, BrowserRouter as Router} from "react-router-dom";
 
 export interface IProgramConstructorStates {
@@ -26,13 +26,29 @@ export interface IProgramConstructorProps {
 
 const routes = [
     {
-        path: '/',
+        path: '/program_constructor',
         exact: true,
-        nav: () => <p>Main</p>
+        nav: () => <p>Выберите упражнение</p>
     },
     {
-        path: '/chest',
-        nav: () => <p>Chest</p>
+        path: '/program_constructor/chest',
+        nav: () => <ChestExercises/>
+    },
+    {
+        path: '/program_constructor/back',
+        nav: () => <p>Спина</p>
+    },
+    {
+        path: '/program_constructor/arms',
+        nav: () => <p>Руки</p>
+    },
+    {
+        path: '/program_constructor/shoulders',
+        nav: () => <p>Плечи</p>
+    },
+    {
+        path: '/program_constructor/legs',
+        nav: () => <p>Ноги</p>
     }
 ]
 
@@ -47,8 +63,6 @@ export default class ProgramConstructor extends Component<any, IProgramConstruct
             exercisesFromServer: [],
             redirectAfterMakeProgram: false
         }
-
-        this.loadExercisesDataFromServer = this.loadExercisesDataFromServer.bind(this);
     }
 
     getExercise(exercise: Exercise) {
@@ -87,20 +101,6 @@ export default class ProgramConstructor extends Component<any, IProgramConstruct
         this.setState({program});
     }
 
-    loadExercisesDataFromServer() {
-        axios.get("http://localhost:9000/api/exercises")
-            .then((res: any) => {
-                this.setState({
-                    exercisesFromServer: res.data
-                })
-            })
-            .catch((err: any) => console.log(err))
-    }
-
-    componentWillMount() {
-        this.loadExercisesDataFromServer()
-    }
-
     render() {
         if (!this.props.isLoggedIn) {
             return <Redirect to="/" />
@@ -112,35 +112,81 @@ export default class ProgramConstructor extends Component<any, IProgramConstruct
 
         const {program: {exercises}, exercisesFromServer} = this.state;
 
+
         const exercisesHtml = exercises.map((exercise: Exercise, index: number) => <p
             onClick={() => this.removeExercise(exercise)}>{exercise.title}</p>);
 
         return (
-            <div className="mb-15rem">
-                <input style={{width: "400px"}} value={this.state.program.title} placeholder="Введите имя программы" onChange={evt => this.updateProgramTitle(evt)}/>
-                <br/>
-                {exercisesHtml}
-                <button onClick={() => this.makeProgram()}>Сделать программу</button><br/>
-                <Link to="/">Назад на главную</Link>
-                <ExercisesSection exercisesFromServer={exercisesFromServer}
-                                  getExercise={(exercise: Exercise) => this.getExercise(exercise)}/>
-                <Nav/>
+            <div style={{display: "flex", width: "70%", margin: "0 auto", justifyContent: "space-around"}}>
+                <div>
+                    <input style={{width: "400px"}} value={this.state.program.title} placeholder="Введите имя программы" onChange={evt => this.updateProgramTitle(evt)}/>
+                    <br/>
+                    {exercisesHtml}
+                    <button onClick={() => this.makeProgram()}>Сделать программу</button><br/>
+                    <Link to="/">Назад на главную</Link>
+                </div>
+                <div>
+                    <ExercisesSection exercisesFromServer={exercisesFromServer}
+                                      getExercise={(exercise: Exercise) => this.getExercise(exercise)}/>
+                    <Nav {...this.props} />
+                </div>
             </div>
         )
     }
 }
 
-class Nav extends Component {
+//todo: int-ces
+class Nav extends Component<any, any> {
     render() {
+        const routesHtml = routes.map((route: any, index: number) => {
+            return <Route key={index} path={route.path} exact={route.exact} component={route.nav} />
+        })
+
         return(
             <Router>
                 <div>
                     <ul style={{listStyleType: 'none', padding: 0}}>
-                        <li><Link to="/">Main</Link></li>
-                        <li><Link to="/chest">Chest</Link></li>
+                        <li><Link to="/program_constructor/chest">Грудь</Link></li>
+                        <li><Link to="/program_constructor/back">Спина</Link></li>
+                        <li><Link to="/program_constructor/arms">Руки</Link></li>
+                        <li><Link to="/program_constructor/shoulders">Плечи</Link></li>
+                        <li><Link to="/program_constructor/legs">Ноги</Link></li>
+                        <li><Link to="/program_constructor/">Назад к выбору упражнений</Link></li>
+                        {routesHtml}
                     </ul>
                 </div>
             </Router>
+        )
+    }
+}
+
+class ChestExercises extends Component<any, any> {
+    constructor(props: any) {
+        super(props);
+        this.state = {
+            exercisesFromServerChest: []
+        }
+
+        this.loadExercisesDataFromServer = this.loadExercisesDataFromServer.bind(this);
+    }
+
+    loadExercisesDataFromServer() {
+        axios.get("http://localhost:9000/api/exercises")
+            .then((res: any) => {
+                this.setState({
+                    exercisesFromServerChest: res.data
+                })
+            })
+            .catch((err: any) => console.log(err))
+    }
+
+    componentWillMount() {
+        this.loadExercisesDataFromServer()
+    }
+
+    render() {
+        return(
+            <p>Chest</p>
         )
     }
 }

@@ -106,7 +106,7 @@ export default class AppRouter extends Component<{}, IAppRouterStates> {
 
                     <Route exact={true} path="/signin" render={() => <SignIn getUserDataFromSignIn={(res: any) => this.getUserDataFromSignIn(res)} isLoggedIn={isLoggedIn} />} />
 
-                    <Route exact={true} path="/program_constructor" render={() => <ProgramConstructor onAddProgram={(newUserData: UserData) => this.getNewUserDataAfterEditProgram(newUserData)} userData={userData} isLoggedIn={isLoggedIn} />} />
+                    <Route exact={true} path="/program_constructor/" render={(props: any) => <ProgramConstructor onAddProgram={(newUserData: UserData) => this.getNewUserDataAfterEditProgram(newUserData)} userData={userData} isLoggedIn={isLoggedIn} {...props} />} />
 
                     <Route exact={true} path="/programs/:id" render={(props: any) => <ProgramPage getNewUserDataAfterEditProgram={(newUserData: UserData) => this.getNewUserDataAfterEditProgram(newUserData)} isLoggedIn={isLoggedIn} {...props} />} />
 
