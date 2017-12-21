@@ -34,7 +34,6 @@ export default class AppRouter extends Component<{}, IAppRouterStates> {
         }
 
         this.getUserData = this.getUserData.bind(this);
-        // this.loadProgramsFromServer = this.loadProgramsFromServer.bind(this);
         this.checkIfLoggedIn = this.checkIfLoggedIn.bind(this);
     }
 
@@ -59,7 +58,6 @@ export default class AppRouter extends Component<{}, IAppRouterStates> {
             })
 
             .then((res: any) => {
-                console.log(res.data);
                 this.setState({
                     userData: res.data,
                     isLoggedIn: true
@@ -77,7 +75,6 @@ export default class AppRouter extends Component<{}, IAppRouterStates> {
     }
 
     getNewUserDataAfterMakeProgram(newUserData: UserData) {
-        console.log(newUserData);
         this.setState({
             userData: newUserData
         })
@@ -87,8 +84,6 @@ export default class AppRouter extends Component<{}, IAppRouterStates> {
     componentWillMount() {
         this.getUserData();
         this.checkIfLoggedIn();
-        // this.loadProgramsFromServer();
-        // setTimeout(this.loadProgramsFromServer, 2000) /** а через сетТаймаут работает**/
     }
 
     render() {

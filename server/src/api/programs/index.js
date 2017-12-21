@@ -76,7 +76,7 @@ router.get('/', showAllPrograms)
  * Get one program for the user
  */
 router.get('/:id',
-  token({required: true}), //чисто проверить..
+  // token({required: true}), //чисто проверить..
   showOneProgram)
 
 /**

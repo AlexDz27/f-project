@@ -51,16 +51,27 @@ export const showOneProgram = ({ params }, res, next) =>
     res.json(program)
   })
 
-export const deleteOneProgram = ({ params }, res, next) =>
-  Program.findById(params.id, (err, program) => {
+// export const deleteOneProgram = ({ params }, res, next) =>
+//   Program.findById(params.id, (err, program) => {
+//     if (err) return res.json(err)
+//
+//     program.remove(err => {
+//       if (err) return res.json(err)
+//
+//       res.json({msg: 'removed!!!'})
+//     })
+//   })
+exports.deleteOneProgram = (req, res) => {
+  Program.findById(req.params.id, (err, program) => {
     if (err) return res.json(err)
 
     program.remove(err => {
       if (err) return res.json(err)
 
-      res.json({msg: 'removed!!!'})
+      res.json({msg: 'program removed!!!'})
     })
   })
+}
 
 
 exports.showAllPrograms = (req, res) => {

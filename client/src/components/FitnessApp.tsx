@@ -29,14 +29,11 @@ export default class FitnessApp extends Component<IFitnessAppProps, IFitnessAppS
 
     render() {
         const {isLoggedIn, userData} = this.props;
-        //
-        // const titles = this.props.userData.programs
-        //     .map((program: any) => <h3>{program.title}</h3>)
-        //     .reduce(prev: any, curr: any) => [prev, ', ', curr])
+
         let titles;
         if (isLoggedIn && Object.keys(userData).length > 0) {
             titles = userData.programs
-                .map((program: Program) => <Link key={program._id} style={{fontSize: '44px', display: 'block'}} to={`/programs/${program._id}`}>{program.title}</Link>)
+                .map((program: Program) => <Link key={program._id} style={{fontSize: '24px', display: 'block'}} to={`/programs/${program._id}`}>{program.title}</Link>)
         } else {
             titles = <h3>Кажется, вас нет в системе! <Link to="/signup">Зарегистрируйтесь </Link>или <Link to="/signin">залогиньтесь!</Link></h3>
         }
@@ -54,11 +51,9 @@ export default class FitnessApp extends Component<IFitnessAppProps, IFitnessAppS
             <div className="FitnessApp">
                 <Header userData={userData} isLoggedIn={isLoggedIn} />
                 <h1>Мои программы</h1>
-                {/*{userData.programs.length == 0 ? <h1>It appears that u have no progs</h1> : <h1>u have some progs</h1>}*/}
-                {/*{userLoggedIn ? <ExercisesSection/> : null}*/}
                 {titles}
                 {makeProgramMsg}
-                <Link to="/program_constructor">Сделать программу</Link>
+                <Link style={{fontSize: "40px"}} to="/program_constructor">Сделать программу</Link>
             </div>
         )
     }

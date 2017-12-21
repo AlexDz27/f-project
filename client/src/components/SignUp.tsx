@@ -66,12 +66,6 @@ export default class SignUp extends Component<ISignUpProps, ISignUpStates> {
         e.preventDefault();
         const newUserObj = new NewUser(newUserName, newUserEmail, newUserPassword);
         axios.request({url: "http://localhost:9000/api/users", method: 'post', data: newUserObj})
-            // .then((res: any) => console.log(res.data))
-            // .then(() => {
-            //     this.setState({
-            //         doRedirectToSignIn: true
-            //     })
-            // })
             .then(() => {
                 this.setState({
                     doRedirect: true

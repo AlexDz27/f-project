@@ -1,6 +1,5 @@
 import * as React from 'react';
 import {Component} from "react";
-// import {Redirect} from "react-router";
 
 import axios from 'axios'
 import {Exercise, Program} from "../types/index";
@@ -48,10 +47,6 @@ export default class ProgramPage extends Component<IProgramPageProps, IProgramPa
             return <Redirect to="/" />
         }
 
-        //TODO: see to isLoggedIn
-        // if (!this.props.isLoggedIn) {
-        //     return <Redirect to="/" />
-        // }
         const {userProgram} = this.state;
         let exercisesTemplate;
         {!userProgram ? console.log('') : exercisesTemplate = userProgram.exercises.map((item: Exercise) => {

@@ -6,8 +6,6 @@ import ExercisesSection from "./ExercisesSection";
 
 import {Exercise, Program, UserData} from '../types/index'
 
-//TODO: deal with the same names for states in FitnessApp and ProgramConstructor
-
 import axios from 'axios'
 import {getUserToken} from "../AppRouter";
 import {Redirect} from "react-router";
@@ -36,7 +34,6 @@ export default class ProgramConstructor extends Component<any, IProgramConstruct
             redirectAfterMakeProgram: false
         }
 
-        // this.updateUserProgramsBeforeMount = this.updateUserProgramsBeforeMount.bind(this)
         this.loadExercisesDataFromServer = this.loadExercisesDataFromServer.bind(this);
     }
 
@@ -86,16 +83,6 @@ export default class ProgramConstructor extends Component<any, IProgramConstruct
             .catch((err: any) => console.log(err))
     }
 
-    /*    updateUserProgramsBeforeMount() {
-            this.setState({
-                userPrograms: [...this.state.userPrograms, this.props.userData.programs]
-            })
-        }
-
-        componentWillMount() {
-            this.updateUserProgramsBeforeMount()
-        }*/
-
     componentWillMount() {
         this.loadExercisesDataFromServer()
     }
@@ -114,9 +101,6 @@ export default class ProgramConstructor extends Component<any, IProgramConstruct
         const exercisesHtml = exercises.map((exercise: Exercise, index: number) => <p
             onClick={() => this.removeExercise(exercise)}>{exercise.title}</p>);
 
-        // const titles = this.props.userData.programs
-        //     .map((program: any) => <h3>{program.title}</h3>)
-
         return (
             <div className="mb-15rem">
                 <input style={{width: "400px"}} value={this.state.program.title} placeholder="Введите имя программы" onChange={evt => this.updateProgramTitle(evt)}/>
@@ -124,8 +108,6 @@ export default class ProgramConstructor extends Component<any, IProgramConstruct
                 {exercisesHtml}
                 <button onClick={() => this.makeProgram()}>Сделать программу</button><br/>
                 <Link to="/">Назад на главную</Link>
-                {/*{userPrograms.map((item: any, index: number) => <a href="#" key={index}>{item.title} - Посмотреть</a>)}*/}
-                {/*{titles}*/}
                 <ExercisesSection exercisesFromServer={exercisesFromServer}
                                   getExercise={(exercise: Exercise) => this.getExercise(exercise)}/>
             </div>
