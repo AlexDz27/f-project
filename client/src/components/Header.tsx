@@ -22,11 +22,11 @@ export default class Header extends Component<IHeaderProps, {}> {
         return(
             <header className="Header header">
                 <span className="Header__initials display-4">Fitness App</span>
-                <span className="Header__initials">Welcome,
+                <span className="Header__initials">Добро пожаловать,
                     {isLoggedIn && userData ? ` ${userData.username}` : " Anonymous"}
                 </span>
                 <div className="user-bar">
-                    {isLoggedIn ? <a onClick={() => this.handleLogout()} href="/">Sign out</a> : <div><a href="/signin">Sign in</a> <a href="/signup">Sign up</a></div>}
+                    {isLoggedIn ? <a onClick={() => this.handleLogout()} href="/">Выйти</a> : <div><a href="/signin">Войти</a> <a href="/signup">Регистрация</a></div>}
                </div>
             </header>
         )

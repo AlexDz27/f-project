@@ -101,7 +101,7 @@ export default class SignUp extends Component<ISignUpProps, ISignUpStates> {
                                    className="btn btn-lg btn-primary btn-block btn-input-form"
                                    value="Sign up" />
                         </form>
-                        <Link to="/">Go back</Link>
+                        <Link to="/">Назад</Link>
                     </div>
                 </div>
             </div>

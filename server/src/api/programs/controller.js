@@ -1,15 +1,16 @@
-import { success, notFound } from '../../services/response/'
-import { Programs } from '.'
-
+import {success, notFound} from '../../services/response/'
+import {Programs} from '.'
+import mongoose from 'mongoose'
 const Program = require('./model');
+const User = require('../user/model');
 
-export const create = ({ bodymen: { body } }, res, next) =>
+export const create = ({bodymen: {body}}, res, next) =>
   Programs.create(body)
     .then((programs) => programs.view(true))
     .then(success(res, 201))
     .catch(next)
 
-export const index = ({ querymen: { query, select, cursor } }, res, next) =>
+export const index = ({querymen: {query, select, cursor}}, res, next) =>
   Programs.count(query)
     .then(count => Programs.find(query, select, cursor)
       .then((programs) => ({
@@ -27,7 +28,7 @@ export const index = ({ querymen: { query, select, cursor } }, res, next) =>
 //     .then(success(res))
 //     .catch(next)
 
-export const update = ({ bodymen: { body }, params }, res, next) =>
+export const update = ({bodymen: {body}, params}, res, next) =>
   Programs.findById(params.id)
     .then(notFound(res))
     .then((programs) => programs ? Object.assign(programs, body).save() : null)
@@ -35,7 +36,7 @@ export const update = ({ bodymen: { body }, params }, res, next) =>
     .then(success(res))
     .catch(next)
 
-export const destroy = ({ params }, res, next) =>
+export const destroy = ({params}, res, next) =>
   Programs.findById(params.id)
     .then(notFound(res))
     .then((programs) => programs ? programs.remove() : null)
@@ -43,7 +44,7 @@ export const destroy = ({ params }, res, next) =>
     .catch(next)
 
 /** MY CODE **/
-export const showOneProgram = ({ params }, res, next) =>
+export const showOneProgram = ({params}, res, next) =>
   Program.findById(params.id, (err, program) => {
     if (err) return res.json(err)
 
@@ -61,16 +62,12 @@ export const showOneProgram = ({ params }, res, next) =>
 //       res.json({msg: 'removed!!!'})
 //     })
 //   })
-exports.deleteOneProgram = (req, res) => {
-  Program.findById(req.params.id, (err, program) => {
-    if (err) return res.json(err)
-
-    program.remove(err => {
-      if (err) return res.json(err)
-
-      res.json({msg: 'program removed!!!'})
+exports.deleteOneProgram = (req, res, next) => {
+  Promise.all([Program.findById(req.params.id), User.findOne({programs:{$elemMatch:{_id:(req.params.id)}}})])
+    .then((responses) => {
+     success(res, 200)(responses)
     })
-  })
+    .catch(next);
 }
 
 

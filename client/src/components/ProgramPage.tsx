@@ -5,6 +5,7 @@ import axios from 'axios'
 import {Exercise, Program} from "../types/index";
 import {Link} from "react-router-dom";
 import {Redirect} from "react-router";
+import {getUserToken} from "../AppRouter";
 
 interface IProgramPageProps {
     params: any
@@ -30,7 +31,11 @@ export default class ProgramPage extends Component<IProgramPageProps, IProgramPa
     getProgramFromServer() {
         const id = this.props.match.params.id
 
-        axios.get(`http://localhost:9000/api/programs/${id}`)
+        axios.get(`http://localhost:9000/api/programs/${id}`, {
+            'headers': {
+                'Authorization': `Bearer ${getUserToken()}`
+            }
+        })
             .then((res: any) => {
                 this.setState({
                     userProgram: res.data
@@ -49,6 +54,7 @@ export default class ProgramPage extends Component<IProgramPageProps, IProgramPa
 
         const {userProgram} = this.state;
         let exercisesTemplate;
+        //TODO: add t istd of cl
         {!userProgram ? console.log('') : exercisesTemplate = userProgram.exercises.map((item: Exercise) => {
             return(
                 <li key={item._id}>{item.title}<br/><small>{item.content}</small></li>

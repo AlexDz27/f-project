@@ -83,7 +83,7 @@ export default class SignIn extends Component<ISignInProps, ISignInStates> {
                             <input onChange={(e: any) => this.handlePasswordCheckChange(e)} type="password" name="password" className="form-control" placeholder="Password" required />
                             <input onClick={(e: any) => this.handleCheckUser(e)} type="submit" className="btn btn-lg btn-primary btn-block btn-input-form" value="Sign in" />
                         </form>
-                        <Link to="/">Go back</Link>
+                        <Link to="/">Назад</Link>
                     </div>
                 </div>
             </div>

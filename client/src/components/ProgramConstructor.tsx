@@ -18,8 +18,10 @@ export interface IProgramConstructorStates {
 }
 
 export interface IProgramConstructorProps {
-    userData?: UserData
+    userData?: UserData | any
     exercisesFromServer: Array<Exercise>
+    onAddProgram: Function
+    isLoggedIn: boolean
 }
 
 export default class ProgramConstructor extends Component<any, IProgramConstructorStates> { //TODO: int for IProgramsSectionProps
@@ -59,7 +61,7 @@ export default class ProgramConstructor extends Component<any, IProgramConstruct
                 'Authorization': 'Bearer ' + userToken
             }
         })
-            .then((res: any) => this.props.onAddProgram(res.data))
+            .then((res: any) => this.props.onAddProgram(res.data)) //todo: any int of UesrDAta
             .then(() => alert(`Ваша программа ${this.state.program.title} успешно добавлена!`))
             .then(() => this.setState({
                 redirectAfterMakeProgram: true
