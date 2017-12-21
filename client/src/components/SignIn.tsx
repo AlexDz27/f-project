@@ -52,9 +52,7 @@ export default class SignIn extends Component<ISignInProps, ISignInStates> {
             password: newUserPasswordCheck
         }})
         .then((res: any) => {
-            console.log(res);
             this.props.getUserDataFromSignIn(res.data)
-            console.log(res.data);
             const token = res.data.token;
             localStorage.setItem('token', token);
             this.setState({
