@@ -9,7 +9,7 @@ import {Exercise, Program, UserData} from '../types/index'
 import axios from 'axios'
 import {getUserToken} from "../AppRouter";
 import {Redirect} from "react-router";
-import {Link} from "react-router-dom";
+import {Link, BrowserRouter as Router} from "react-router-dom";
 
 export interface IProgramConstructorStates {
     program: Program
@@ -23,6 +23,18 @@ export interface IProgramConstructorProps {
     onAddProgram: Function
     isLoggedIn: boolean
 }
+
+const routes = [
+    {
+        path: '/',
+        exact: true,
+        nav: () => <p>Main</p>
+    },
+    {
+        path: '/chest',
+        nav: () => <p>Chest</p>
+    }
+]
 
 export default class ProgramConstructor extends Component<any, IProgramConstructorStates> { //TODO: int for IProgramsSectionProps
     constructor(props: any) {
@@ -112,7 +124,23 @@ export default class ProgramConstructor extends Component<any, IProgramConstruct
                 <Link to="/">Назад на главную</Link>
                 <ExercisesSection exercisesFromServer={exercisesFromServer}
                                   getExercise={(exercise: Exercise) => this.getExercise(exercise)}/>
+                <Nav/>
             </div>
+        )
+    }
+}
+
+class Nav extends Component {
+    render() {
+        return(
+            <Router>
+                <div>
+                    <ul style={{listStyleType: 'none', padding: 0}}>
+                        <li><Link to="/">Main</Link></li>
+                        <li><Link to="/chest">Chest</Link></li>
+                    </ul>
+                </div>
+            </Router>
         )
     }
 }
