@@ -11,10 +11,12 @@ interface IProgramPageProps {
     params: any
     match: any
     isLoggedIn: boolean
+    getNewUserDataAfterEditProgram: Function
 }
 
 interface IProgramPageStates {
-    userProgram?: Program
+    userProgram?: Program | null
+    redirectAfterDelete: boolean
 }
 
 export default class ProgramPage extends Component<IProgramPageProps, IProgramPageStates> {
@@ -22,7 +24,8 @@ export default class ProgramPage extends Component<IProgramPageProps, IProgramPa
         super(props);
 
         this.state = {
-            userProgram: undefined
+            userProgram: undefined,
+            redirectAfterDelete: false
         }
 
         this.getProgramFromServer = this.getProgramFromServer.bind(this);
@@ -43,6 +46,23 @@ export default class ProgramPage extends Component<IProgramPageProps, IProgramPa
             })
     }
 
+    deleteProgram(e: any) {
+        e.preventDefault()
+        const id = this.props.match.params.id
+        
+        axios.delete(`http://localhost:9000/api/programs/${id}`, {
+            'headers': {
+                'Authorization': `Bearer ${getUserToken()}`
+            }
+        })
+            .then((res: any) => {
+                this.props.getNewUserDataAfterEditProgram(res.data)
+                this.setState({
+                    redirectAfterDelete: true
+                })
+            })
+    }
+
     componentWillMount() {
         this.getProgramFromServer()
     }
@@ -52,14 +72,20 @@ export default class ProgramPage extends Component<IProgramPageProps, IProgramPa
             return <Redirect to="/" />
         }
 
+        if (this.state.redirectAfterDelete) {
+            return <Redirect to="/" />
+        }
+
         const {userProgram} = this.state;
+
         let exercisesTemplate;
-        //TODO: add t istd of cl
-        {!userProgram ? console.log('') : exercisesTemplate = userProgram.exercises.map((item: Exercise) => {
-            return(
-                <li key={item._id}>{item.title}<br/><small>{item.content}</small></li>
-            )
-        })}
+        if (userProgram) {
+            exercisesTemplate = userProgram.exercises.map((item: Exercise) => {
+                return(
+                    <li key={item._id}>{item.title}<br/><small>{item.content}</small></li>
+                )
+            })
+        }
 
         return(
             <div>
@@ -67,7 +93,7 @@ export default class ProgramPage extends Component<IProgramPageProps, IProgramPa
                 <ul>
                     {exercisesTemplate}
                 </ul>
-                <a style={{color: "red"}} href="#">Удалить программу</a><br/>
+                <a onClick={(e: any) => this.deleteProgram(e)} style={{color: "red"}} href="#">Удалить программу</a><br/>
                 <Link to="/">Назад на главную</Link>
             </div>
         )

@@ -13,7 +13,7 @@ export interface Exercise {
 }
 
 export class Program {
-    public _id?: string
+    public id?: string
     public title: string
     public exercises: Array<Exercise>
 

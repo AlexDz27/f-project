@@ -1,6 +1,7 @@
 import {success, notFound} from '../../services/response/'
 import {Programs} from '.'
 import mongoose from 'mongoose'
+
 const Program = require('./model');
 const User = require('../user/model');
 
@@ -63,12 +64,15 @@ export const showOneProgram = ({params}, res, next) =>
 //     })
 //   })
 exports.deleteOneProgram = (req, res, next) => {
-  Promise.all([Program.findById(req.params.id), User.findOne({programs:{$elemMatch:{_id:(req.params.id)}}})])
-    .then((responses) => {
-     success(res, 200)(responses)
+  Promise.all([Program.remove(req.params.id), User.findOne({programs: {$elemMatch: {_id: req.params.id}}})])
+    .then(([, user]) => {
+      user.programs = user.programs.filter((program) => program._id + '' !== req.params.id);
+      console.log(user.programs)
+      return user.save();
     })
+    .then(success(res, 200))
     .catch(next);
-}
+};
 
 
 exports.showAllPrograms = (req, res) => {

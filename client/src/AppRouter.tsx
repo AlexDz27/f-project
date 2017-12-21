@@ -74,11 +74,10 @@ export default class AppRouter extends Component<{}, IAppRouterStates> {
         })
     }
 
-    getNewUserDataAfterMakeProgram(newUserData: UserData) {
+    getNewUserDataAfterEditProgram(newUserData: UserData) {
         this.setState({
             userData: newUserData
         })
-        this.getUserData();
     }
     
     componentWillMount() {
@@ -107,9 +106,9 @@ export default class AppRouter extends Component<{}, IAppRouterStates> {
 
                     <Route exact={true} path="/signin" render={() => <SignIn getUserDataFromSignIn={(res: any) => this.getUserDataFromSignIn(res)} isLoggedIn={isLoggedIn} />} />
 
-                    <Route exact={true} path="/program_constructor" render={() => <ProgramConstructor onAddProgram={(newUserData: UserData) => this.getNewUserDataAfterMakeProgram(newUserData)} userData={userData} isLoggedIn={isLoggedIn} />} />
+                    <Route exact={true} path="/program_constructor" render={() => <ProgramConstructor onAddProgram={(newUserData: UserData) => this.getNewUserDataAfterEditProgram(newUserData)} userData={userData} isLoggedIn={isLoggedIn} />} />
 
-                    <Route exact={true} path="/programs/:id" render={(props: any) => <ProgramPage isLoggedIn={isLoggedIn} {...props} />} />
+                    <Route exact={true} path="/programs/:id" render={(props: any) => <ProgramPage getNewUserDataAfterEditProgram={(newUserData: UserData) => this.getNewUserDataAfterEditProgram(newUserData)} isLoggedIn={isLoggedIn} {...props} />} />
 
                     <Route exact={true} path="*" render={() => <h1>404 page not found (route for a page)</h1>} />
                 </Switch>

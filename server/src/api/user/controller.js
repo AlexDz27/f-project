@@ -1,5 +1,5 @@
-import { success, notFound } from '../../services/response/'
-import { User } from '.'
+import {success, notFound} from '../../services/response/'
+import {User} from '.'
 
 const LocalStorage = require('node-localstorage').LocalStorage;
 // localStorage = new LocalStorage('./scratch');
@@ -8,7 +8,7 @@ const LocalStorage = require('node-localstorage').LocalStorage;
 
 const Program = require('../programs/model');
 
-export const index = ({ querymen: { query, select, cursor } }, res, next) =>
+export const index = ({querymen: {query, select, cursor}}, res, next) =>
   User.count(query)
     .then(count => User.find(query, select, cursor)
       .then(users => ({
@@ -19,17 +19,17 @@ export const index = ({ querymen: { query, select, cursor } }, res, next) =>
     .then(success(res))
     .catch(next)
 
-export const show = ({ params }, res, next) =>
+export const show = ({params}, res, next) =>
   User.findById(params.id)
     .then(notFound(res))
     .then((user) => user ? user.view() : null)
     .then(success(res))
     .catch(next)
 
-export const showMe = ({ user }, res) =>
+export const showMe = ({user}, res) =>
   res.json(user.view(true))
 
-export const create = ({ bodymen: { body } }, res, next) =>
+export const create = ({bodymen: {body}}, res, next) =>
   User.create(body)
     .then((user) => user.view(true))
     .then(console.log(body))
@@ -47,7 +47,7 @@ export const create = ({ bodymen: { body } }, res, next) =>
       }
     })
 
-export const debugSignUp = ({ bodymen: { body } }, res, next) => { //bodymen -> body = req.body
+export const debugSignUp = ({bodymen: {body}}, res, next) => { //bodymen -> body = req.body
   console.log(body);
   User.create(body)
     .then(console.log(body))
@@ -74,7 +74,6 @@ export const debugIsLoggedIn = (req, res, next) => {
 // export const logOut = (req, res, next) => {
 //
 // }
-
 
 
 // export const update = ({ bodymen: { body }, params, user }, res, next) =>
@@ -134,39 +133,32 @@ export const debugIsLoggedIn = (req, res, next) => {
 //     .then(success(res, 201))
 //     .catch(next)
 
-export const createMyProgram = (req, res) => {
-  User.findById({_id: req.params.id}, (err, user) => {
-    // res.json(user.programs)
-    // if (err) res.json(err);
-
-    if (!user) {
-      res.json('User not found')
-    } else {
-      console.log(req.body);
-      const newProgram = new Program({
-        title: req.body.title,
-        exercises: req.body.exercises
-      });
-      newProgram.save(err => {
-        if (err) res.json(err)
-      });
-      // console.log(newProgram)
-      user.programs.push(newProgram); //ADDING THE PROGRAM TO THE USER'S ACCOUNT - pohody iz-za etogo... a hotya...
-      user.save(err => {
-        if (err) res.json(err)
-      });
-      // res.json(user.programs)
-      // res.json(newProgram)
-      // console.log(user)
-      res.json(user)
-
-    }
-    })
-  }
+export const createMyProgram = (req, res, next) => {
+  User.findById({_id: req.params.id})
+    .then((user) => {
+      if (!user) {
+        res.json('User not found')
+      } else {
+        const newProgram = new Program({
+          title: req.body.title,
+          exercises: req.body.exercises
+        });
+        return newProgram.save()
+          .then((program) => {
+            console.log(program);
+            user.programs.push(newProgram);
+            return user.save();
+          })
+          .then(() => {
+            res.json(user)
+          })
+      }
+    }).catch(next);
+};
 
 
 export const showMyPrograms = (req, res) => {
   User.findById({_id: req.params.id}, (err, user) => {
-  res.json(user.programs)
+    res.json(user.programs)
   })
 }
