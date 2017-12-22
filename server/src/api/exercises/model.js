@@ -6,6 +6,9 @@ const exercisesSchema = new Schema({
   },
   content: {
     type: String
+  },
+  group: {
+    type: String
   }
 }
 )

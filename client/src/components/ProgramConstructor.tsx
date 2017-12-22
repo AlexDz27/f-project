@@ -53,13 +53,13 @@ export interface IProgramConstructorProps {
 //     }
 // ]
 
-export default class ProgramConstructor extends Component<any, IProgramConstructorStates> { //TODO: int for IProgramsSectionProps
+export default class ProgramConstructor extends Component<IProgramConstructorProps, IProgramConstructorStates> {
     constructor(props: any) {
         super(props);
         this.state = {
             program: {
                 title: '',
-                exercises: [],
+                exercises: []
             },
             redirectAfterMakeProgram: false
         }
@@ -71,11 +71,16 @@ export default class ProgramConstructor extends Component<any, IProgramConstruct
         this.setState({program});
     }
 
-    removeExercise(exercise: Exercise) {
+    removeExercise(index: number) {
         const {program} = this.state;
-        program.exercises = program.exercises.filter((item: Exercise) => {
-            return item._id !== exercise._id
-        });
+        // console.log(program.exercises[exToRemoveId]);
+
+        const exercsisesArr = this.state.program.exercises;
+        exercsisesArr.splice(index, 1)
+
+        // program.exercises = program.exercises.filter((item: Exercise) => {
+        //     return item._id !== exercise._id
+        // });
         this.setState({program})
     }
 
@@ -113,8 +118,7 @@ export default class ProgramConstructor extends Component<any, IProgramConstruct
         const {program: {exercises}} = this.state;
 
 
-        const exercisesHtml = exercises.map((exercise: Exercise, index: number) => <p key={index}
-            onClick={() => this.removeExercise(exercise)}>{exercise.title}</p>);
+        const exercisesHtml = exercises.map((exercise: Exercise, index: number) => <div key={index}><p style={{display: "inline-block"}} >{exercise.title}</p>&nbsp;&nbsp;<span onClick={() => this.removeExercise(index)} style={{color: "red", fontWeight: "bold", display: "inline-block", cursor: "pointer"}}>X</span></div>);
 
         return (
             <div style={{display: "flex", width: "70%", margin: "0 auto", justifyContent: "space-around"}}>
@@ -135,8 +139,11 @@ export default class ProgramConstructor extends Component<any, IProgramConstruct
     }
 }
 
-//todo: int-ces
-class Nav extends Component<any, any> {
+interface INavProps {
+    getExercise: Function
+}
+
+class Nav extends Component<INavProps , {}> {
     getExercise(exercise: Exercise) {
         this.props.getExercise(exercise)
     }
@@ -145,18 +152,21 @@ class Nav extends Component<any, any> {
         // const routesHtml = routes.map((route: any, index: number) => {
         //     return <Route key={index} path={route.path} exact={route.exact} render={route.nav} />
         // })
+        const groupToDownload = window.location.pathname.substring(21)
+        console.log(groupToDownload);
 
         return(
             <Router>
                 <div>
                     <ul style={{listStyleType: 'none', padding: 0}}>
                         <h1>Упражнения</h1>
+                        <h6>Выберите группу мышц</h6>
                         <li><Link to="/program_constructor/chest">Грудь</Link></li>
                         <li><Link to="/program_constructor/back">Спина</Link></li>
                         <li><Link to="/program_constructor/arms">Руки</Link></li>
                         <li><Link to="/program_constructor/shoulders">Плечи</Link></li>
                         <li><Link to="/program_constructor/legs">Ноги</Link></li>
-                        <li><Link to="/program_constructor/">Назад к выбору группы мышц</Link></li>
+                        {/*<li><Link to="/program_constructor/">Назад к выбору группы мышц</Link></li>*/}
                         {/*{routesHtml}*/}
                         <ExercisesSection getExercise={(exercise: Exercise) => this.getExercise(exercise)} />
                     </ul>

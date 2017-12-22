@@ -10,6 +10,7 @@ export interface Exercise {
     _id: string
     title: string
     content: string
+    index: number
 }
 
 export class Program {

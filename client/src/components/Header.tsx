@@ -23,7 +23,7 @@ export default class Header extends Component<IHeaderProps, {}> {
             <header className="Header header">
                 <span className="Header__initials display-4">Fitness App</span>
                 <span className="Header__initials">Добро пожаловать,
-                    {isLoggedIn && userData ? ` ${userData.username}` : " Anonymous"}
+                    <span style={{color: "green"}}>{isLoggedIn && userData ? ` ${userData.username}` : " Anonymous"}</span>
                 </span>
                 <div className="user-bar">
                     {isLoggedIn ? <a onClick={() => this.handleLogout()} href="/">Выйти</a> : <div><a href="/signin">Войти</a> <a href="/signup">Регистрация</a></div>}

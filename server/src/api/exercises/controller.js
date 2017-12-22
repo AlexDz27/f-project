@@ -67,10 +67,19 @@ export const getAll = (req, res) => {
   })
 }
 
-// export const setup = (req, res) => {
+export const getChest = (req, res) => {
+  Exercise.find({group: "Chest"}, (err, exercises) => {
+    if (err) return res.json(err);
+
+    res.json(exercises)
+  })
+}
+
+// export const setupLegs = (req, res) => {
 //   const newExercise = new Exercise({
-//     title: "Отжим на брусьях",
-//     content: "брусья брусья"
+//     title: "Присед на одной ноге",
+//     content: "присприс одна нога",
+//     group: "Legs"
 //   })
 //   newExercise.save()
 //

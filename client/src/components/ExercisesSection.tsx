@@ -9,12 +9,16 @@ import {Exercise} from '../types/index'
 
 import axios from 'axios'
 
+interface IExercisesSectionProps {
+    getExercise: Function
+}
+
 interface IExercisesSectionStates {
     exercisesFromServer: Array<Exercise>
 }
 
 
-export default class ExercisesSection extends Component<any, IExercisesSectionStates> { //TODO: in-es
+export default class ExercisesSection extends Component<IExercisesSectionProps, IExercisesSectionStates> {
     constructor(props: any) {
         super(props);
 
@@ -26,7 +30,7 @@ export default class ExercisesSection extends Component<any, IExercisesSectionSt
     }
 
     loadExercisesDataFromServer() {
-        axios.get("http://localhost:9000/api/exercises")
+        axios.get("http://localhost:9000/api/exercises/chest")
             .then((res: any) => {
                 this.setState({
                     exercisesFromServer: res.data
