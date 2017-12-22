@@ -67,3 +67,13 @@ export const getAll = (req, res) => {
   })
 }
 
+// export const setup = (req, res) => {
+//   const newExercise = new Exercise({
+//     title: "Отжим на брусьях",
+//     content: "брусья брусья"
+//   })
+//   newExercise.save()
+//
+//   res.json(newExercise)
+// }
+

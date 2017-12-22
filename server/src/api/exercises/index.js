@@ -18,6 +18,8 @@ const router = express.Router();
 
 router.get('/', getAll)
 
+// router.get('/setup', setup)
+
 
 module.exports = router
 
