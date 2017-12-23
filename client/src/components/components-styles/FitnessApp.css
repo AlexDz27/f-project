@@ -3,3 +3,13 @@
     margin: 0 auto;
     border: 1px solid blue;
 }
+
+.pc-ul a:focus {
+    color: green;
+    font-weight: bold;
+}
+
+.activeA {
+    color: green;
+    font-weight: bold;
+}

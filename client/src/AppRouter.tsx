@@ -21,6 +21,7 @@ export function getUserToken() {
 export interface IAppRouterStates {
     userData?: UserData | any
     isLoggedIn: boolean
+    toBeUpdated: boolean
 }
 
 export default class AppRouter extends Component<{}, IAppRouterStates> {
@@ -29,7 +30,8 @@ export default class AppRouter extends Component<{}, IAppRouterStates> {
 
         this.state = {
             isLoggedIn: false,
-            userData: {}
+            userData: {},
+            toBeUpdated: false
         }
 
         this.getUserData = this.getUserData.bind(this);
@@ -78,6 +80,12 @@ export default class AppRouter extends Component<{}, IAppRouterStates> {
             userData: newUserData
         })
     }
+
+    toggleToBeUpdated() {
+        this.setState({
+            toBeUpdated: true
+        })
+    }
     
     componentWillMount() {
         this.getUserData();
@@ -107,7 +115,7 @@ export default class AppRouter extends Component<{}, IAppRouterStates> {
 
                     <Route exact={true} path="/program_constructor/" render={(props: any) => <ProgramConstructor onAddProgram={(newUserData: UserData) => this.getNewUserDataAfterEditProgram(newUserData)} userData={userData} isLoggedIn={isLoggedIn} {...props} />} />
 
-                    <Route exact={true} path="/programs/:id" render={(props: any) => <ProgramPage getNewUserDataAfterEditProgram={(newUserData: UserData) => this.getNewUserDataAfterEditProgram(newUserData)} isLoggedIn={isLoggedIn} {...props} />} />
+                    <Route exact={true} path="/programs/:id" render={(props: any) => <ProgramPage getNewUserDataAfterEditProgram={(newUserData: UserData) => this.getNewUserDataAfterEditProgram(newUserData)} isLoggedIn={isLoggedIn} toBeUpdated={() => this.toggleToBeUpdated()} {...props} />} />
 
                     <Route exact={true} path="*" render={() => <h1>404 page not found (route for a page)</h1>} />
                 </Switch>

@@ -13,6 +13,7 @@ import axios from 'axios'
 
 interface IExercisesSectionProps {
     getExercise: Function
+    href: string
 }
 
 interface IExercisesSectionStates {
@@ -28,11 +29,11 @@ export default class ExercisesSection extends Component<IExercisesSectionProps, 
             exercisesFromServer: []
         }
 
-        this.loadExercisesDataFromServer = this.loadExercisesDataFromServer.bind(this)
+        this.loadExercisesDataFromServerOnClick = this.loadExercisesDataFromServerOnClick.bind(this)
     }
 
-    loadExercisesDataFromServer() {
-        axios.get("http://localhost:9000/api/exercises/chest")
+    loadExercisesDataFromServerOnClick(propsHref: any) {
+        axios.get(`http://localhost:9000/api/exercises/${propsHref}`)
             .then((res: any) => {
                 this.setState({
                     exercisesFromServer: res.data
@@ -45,14 +46,15 @@ export default class ExercisesSection extends Component<IExercisesSectionProps, 
         this.props.getExercise(exercise)
     }
 
-    componentWillMount() {
-        this.loadExercisesDataFromServer()
+    componentWillReceiveProps(nextProps: any) {
+        const neededHref = nextProps.href;
+        this.loadExercisesDataFromServerOnClick(neededHref)
     }
 
     render() {
-        const exPath = window.location.pathname.substring(21)
-
         const {exercisesFromServer} = this.state;
+
+        const {href} = this.props;
 
         const exerciseItemTemplate = exercisesFromServer.map((exercise: any, index: number) => {
             return(
@@ -60,9 +62,10 @@ export default class ExercisesSection extends Component<IExercisesSectionProps, 
             )
         })
         //todo: add switch, у меня чето не полчуается
-        if (exPath === 'chest') {
+        if (href === 'chest' || href === 'back' || href === 'arms' || href === 'shoulders' || href === 'legs') {
             return(
                 <div>
+                    <hr/>
                     <ul>
                         {exerciseItemTemplate}
                     </ul>

@@ -1,8 +1,6 @@
 import * as React from 'react';
 import {Component} from "react";
 
-import {withRouter} from 'react-router'
-
 import "./components-styles/FitnessApp.css"
 import ExercisesSection from "./ExercisesSection";
 
@@ -11,11 +9,12 @@ import {Exercise, Program, UserData} from '../types/index'
 import axios from 'axios'
 import {getUserToken} from "../AppRouter";
 import {Redirect} from "react-router";
-import {NavLink, BrowserRouter as Router} from "react-router-dom";
+import {Link} from "react-router-dom";
 
 export interface IProgramConstructorStates {
     program: Program
     redirectAfterMakeProgram: boolean
+    href: string
 }
 
 export interface IProgramConstructorProps {
@@ -25,36 +24,7 @@ export interface IProgramConstructorProps {
     isLoggedIn: boolean
 }
 
-// const routes = [
-//     {
-//         path: '/program_constructor',
-//         exact: true,
-//         nav: () => <p>Выберите группу мышц</p>
-//     },
-//     {
-//         path: '/program_constructor/chest',
-//         // nav: () => <ExercisesSection getExercise={(exercise: Exercise) => this.getExercise(exercise)}/>
-//         nav: () => <ExercisesSection />
-//
-//     },
-//     {
-//         path: '/program_constructor/back',
-//         nav: () => <p>Спина</p>
-//     },
-//     {
-//         path: '/program_constructor/arms',
-//         nav: () => <p>Руки</p>
-//     },
-//     {
-//         path: '/program_constructor/shoulders',
-//         nav: () => <p>Плечи</p>
-//     },
-//     {
-//         path: '/program_constructor/legs',
-//         nav: () => <p>Ноги</p>
-//     }
-// ]
-export default class ProgramConstructor extends Component<any, IProgramConstructorStates> {
+export default class ProgramConstructor extends Component<IProgramConstructorProps, IProgramConstructorStates> {
     constructor(props: any) {
         super(props);
         this.state = {
@@ -62,6 +32,7 @@ export default class ProgramConstructor extends Component<any, IProgramConstruct
                 title: '',
                 exercises: []
             },
+            href: '',
             redirectAfterMakeProgram: false
         }
     }
@@ -101,17 +72,11 @@ export default class ProgramConstructor extends Component<any, IProgramConstruct
         this.setState({program});
     }
 
-    logCurrLoc() {
-        const currLoc = this.props.location;
-        console.log(currLoc);
-    }
-
-    componentDidMount() {
-        this.onRouteChanged()
-    }
-
-    onRouteChanged() {
-        setInterval(console.log(this.props.location), 3000)
+    getHref(e: any) {
+        e.preventDefault()
+        this.setState({
+            href: e.target.getAttribute("data-href")
+        })
     }
 
     render() {
@@ -123,7 +88,7 @@ export default class ProgramConstructor extends Component<any, IProgramConstruct
             return <Redirect to="/" />
         }
 
-        const {program: {exercises}} = this.state;
+        const {program: {exercises}, href} = this.state;
 
 
         const exercisesHtml = exercises.map((exercise: Exercise, index: number) => <div key={index}><p style={{display: "inline-block"}} >{exercise.title}</p>&nbsp;&nbsp;<span onClick={() => this.removeExercise(index)} style={{color: "red", fontWeight: "bold", display: "inline-block", cursor: "pointer"}}>X</span></div>);
@@ -135,89 +100,25 @@ export default class ProgramConstructor extends Component<any, IProgramConstruct
                     <br/>
                     {exercisesHtml}
                     <button onClick={() => this.makeProgram()}>Сделать программу</button><br/>
-                    <NavLink to="/">Назад на главную</NavLink>
+                    <Link to="/">Назад на главную</Link>
                 </div>
                 <div>
-                    {/*<ExercisesSection exercisesFromServer={exercisesFromServer}*/}
-                                      {/*getExercise={(exercise: Exercise) => this.getExercise(exercise)}/>*/}
-                    <Nav getCurrLoc={() => this.logCurrLoc()} getExercise={(exercise: Exercise) => this.getExercise(exercise)} />
+                    <div>
+                        <ul className="pc-ul" style={{listStyleType: 'none', padding: 0}}>
+                            <h1>Упражнения</h1>
+                            <h6>Выберите группу мышц</h6>
+                            <li><a onClick={(e: any) => this.getHref(e)} href="#" data-href="chest">Грудь</a></li>
+                            <li><a onClick={(e: any) => this.getHref(e)} href="#" data-href="back">Спина</a></li>
+                            <li><a onClick={(e: any) => this.getHref(e)} href="#" data-href="arms">Руки</a></li>
+                            <li><a onClick={(e: any) => this.getHref(e)} href="#" data-href="shoulders">Плечи</a></li>
+                            <li><a onClick={(e: any) => this.getHref(e)} href="#" data-href="legs">Ноги</a></li>
+                            {/*<li><NavLink to="/program_constructor/">Назад к выбору группы мышц</NavLink></li>*/}
+                            {/*{routesHtml}*/}
+                            <ExercisesSection href={href} getExercise={(exercise: Exercise) => this.getExercise(exercise)} />
+                        </ul>
+                    </div>
                 </div>
             </div>
         )
     }
 }
-
-withRouter(ProgramConstructor)
-
-interface INavProps {
-    getExercise: Function
-    getCurrLoc: Function
-}
-
-class Nav extends Component<INavProps , {}> {
-    getExercise(exercise: Exercise) {
-        this.props.getExercise(exercise)
-    }
-
-    getCurrLoc() {
-        this.props.getCurrLoc()
-    }
-
-    render() {
-        // const routesHtml = routes.map((route: any, index: number) => {
-        //     return <Route key={index} path={route.path} exact={route.exact} render={route.nav} />
-        // })
-        const groupToDownload = window.location.pathname.substring(21)
-        console.log(groupToDownload);
-
-        return(
-            <Router>
-                <div>
-                    <ul style={{listStyleType: 'none', padding: 0}}>
-                        <h1>Упражнения</h1>
-                        <h6>Выберите группу мышц</h6>
-                        <li><NavLink activeStyle={{color: "green", fontWeight: "bold"}} onClick={() => this.getCurrLoc()} to="/program_constructor/chest">Грудь</NavLink></li>
-                        <li><NavLink activeStyle={{color: "green", fontWeight: "bold"}} to="/program_constructor/back">Спина</NavLink></li>
-                        <li><NavLink activeStyle={{color: "green", fontWeight: "bold"}} to="/program_constructor/arms">Руки</NavLink></li>
-                        <li><NavLink activeStyle={{color: "green", fontWeight: "bold"}} to="/program_constructor/shoulders">Плечи</NavLink></li>
-                        <li><NavLink activeStyle={{color: "green", fontWeight: "bold"}} to="/program_constructor/legs">Ноги</NavLink></li>
-                        {/*<li><NavLink to="/program_constructor/">Назад к выбору группы мышц</NavLink></li>*/}
-                        {/*{routesHtml}*/}
-                        <ExercisesSection getExercise={(exercise: Exercise) => this.getExercise(exercise)} />
-                    </ul>
-                </div>
-            </Router>
-        )
-    }
-}
-
-// class ChestExercises extends Component<any, any> {
-//     constructor(props: any) {
-//         super(props);
-//         this.state = {
-//             exercisesFromServerChest: []
-//         }
-//
-//         this.loadExercisesDataFromServer = this.loadExercisesDataFromServer.bind(this);
-//     }
-//
-//     loadExercisesDataFromServer() {
-//         axios.get("http://localhost:9000/api/exercises")
-//             .then((res: any) => {
-//                 this.setState({
-//                     exercisesFromServerChest: res.data
-//                 })
-//             })
-//             .catch((err: any) => console.log(err))
-//     }
-//
-//     componentWillMount() {
-//         this.loadExercisesDataFromServer()
-//     }
-//
-//     render() {
-//         return(
-//             <p>Chest</p>
-//         )
-//     }
-// }

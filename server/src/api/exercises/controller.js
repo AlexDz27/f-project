@@ -75,6 +75,30 @@ export const getChest = (req, res) => {
   })
 }
 
+export const getBack = (req, res) => {
+  Exercise.find({group: "Back"}, (err, exercises) => {
+    if (err) return res.json(err);
+
+    res.json(exercises)
+  })
+}
+
+export const getArms = (req, res) => {
+  Exercise.find({group: "Arms"}, (err, exercises) => {
+    if (err) return res.json(err);
+
+    res.json(exercises)
+  })
+}
+
+export const getShoulders = (req, res) => {
+  Exercise.find({group: "Shoulders"}, (err, exercises) => {
+    if (err) return res.json(err);
+
+    res.json(exercises)
+  })
+}
+
 export const getLegs = (req, res) => {
   Exercise.find({group: "Legs"}, (err, exercises) => {
     if (err) return res.json(err);
@@ -85,9 +109,9 @@ export const getLegs = (req, res) => {
 
 // export const setup = (req, res) => {
 //   const newExercise = new Exercise({
-//     title: "Жим глей лежа",
-//     content: "лежажим глей",
-//     group: "Chest"
+//     title: "Рвзодки глей",
+//     content: "раз разд",
+//     group: "Shoulders"
 //   })
 //   newExercise.save()
 //
