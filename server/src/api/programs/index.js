@@ -8,7 +8,7 @@
 import {token} from "../../services/passport/index";
 // export Programs, { schema } from './model'
 
-import {deleteOneProgram, showAllPrograms, showOneProgram} from "./controller";
+import {deleteOneProgram, showAllPrograms, showOneProgram, updateOneProgram} from "./controller";
 
 const programsController = require('./controller')
 const Program = require('./model');
@@ -76,8 +76,12 @@ router.get('/', showAllPrograms)
  * Get one program for the user
  */
 router.get('/:id',
-  token({required: true}), //чисто проверить..
+  token({required: true}),
   showOneProgram)
+
+router.put('/:id',
+  token({required: true}),
+  updateOneProgram)
 
 /**
  * DELETE /programs/:id
@@ -86,7 +90,6 @@ router.get('/:id',
 router.delete('/:id',
   token({required: true}),
   deleteOneProgram)
-//todo: add token({required: true})
 
 //
 // /**

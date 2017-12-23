@@ -157,8 +157,35 @@ export const createMyProgram = (req, res, next) => {
 };
 
 
+// export const updateMyProgram = (req, res) => {
+//   User.findById({_id: req.params.id})
+//     .then((user) => {
+//       if (!user) {
+//         res.json('User not found')
+//       } else {
+//         const updatedProgram = new Program({
+//           title: req.body.title,
+//           exercises: req.body.exercises
+//         })
+//         return updatedProgram.save()
+//           .then((program) => {
+//             console.log(program);
+//             user.programs
+//           })
+//       }
+//     })
+// }
+
+/*export const updateMyProgram = (req, res) => {
+  User.findById({_id: req.params.id}, (err, user) => {
+    res.json(user.programs)
+  })
+}*/
+
+
 export const showMyPrograms = (req, res) => {
   User.findById({_id: req.params.id}, (err, user) => {
     res.json(user.programs)
   })
 }
+

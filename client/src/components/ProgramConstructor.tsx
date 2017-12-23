@@ -15,6 +15,7 @@ export interface IProgramConstructorStates {
     program: Program
     redirectAfterMakeProgram: boolean
     href: string
+    userProgramToUpdate?: Program | any
 }
 
 export interface IProgramConstructorProps {
@@ -22,6 +23,8 @@ export interface IProgramConstructorProps {
     exercisesFromServer: Array<Exercise>
     onAddProgram: Function
     isLoggedIn: boolean
+    userProgramToUpdate?: Program | any
+    removeUpdateStage: Function
 }
 
 export default class ProgramConstructor extends Component<IProgramConstructorProps, IProgramConstructorStates> {
@@ -32,9 +35,15 @@ export default class ProgramConstructor extends Component<IProgramConstructorPro
                 title: '',
                 exercises: []
             },
+            userProgramToUpdate: {
+                title: '',
+                exercises: []
+            },
             href: '',
             redirectAfterMakeProgram: false
         }
+
+        this.setProgramToUpdate = this.setProgramToUpdate.bind(this)
     }
 
     getExercise(exercise: Exercise) {
@@ -51,7 +60,7 @@ export default class ProgramConstructor extends Component<IProgramConstructorPro
     }
 
     makeProgram() {
-        const userToken = getUserToken()
+        const userToken = getUserToken() //todo: mb ne nado userToken, prosto getUserToken()
         const newProgram: Program = new Program(this.state.program.title, this.state.program.exercises)
         axios.post(`http://localhost:9000/api/users/${this.props.userData._id}/my_programs`, newProgram, {
             'headers': {
@@ -60,6 +69,21 @@ export default class ProgramConstructor extends Component<IProgramConstructorPro
         })
             .then((res: any) => this.props.onAddProgram(res.data)) //todo: any int of UesrDAta
             .then(() => alert(`Ваша программа ${this.state.program.title} успешно добавлена!`)) //todo:mod int alert
+            .then(() => this.setState({
+                redirectAfterMakeProgram: true
+            }))
+            .catch((err: any) => console.log(err))
+    }
+
+    editProgram() {
+        const editedProgram: Program = new Program(this.state.program.title, this.state.program.exercises)
+        axios.put(`http://localhost:9000/api/programs/${this.props.userProgramToUpdate.id}/`, editedProgram, {
+            'headers': {
+                'Authorization': 'Bearer ' + getUserToken()
+            }
+        })
+            // .then((res: any) => this.props.onAddProgram(res.data))
+            .then(() => alert(`Ваша программа ${this.state.program.title} успешно обновлена!`))
             .then(() => this.setState({
                 redirectAfterMakeProgram: true
             }))
@@ -79,6 +103,26 @@ export default class ProgramConstructor extends Component<IProgramConstructorPro
         })
     }
 
+    setProgramToUpdate() {
+        const {userProgramToUpdate} = this.props;
+        if (Object.keys(userProgramToUpdate).length > 0) {
+            this.setState({
+                program: {
+                    title: userProgramToUpdate.title,
+                    exercises: userProgramToUpdate.exercises
+                }
+            })
+        }
+    }
+
+    removeUpdateStage() {
+        this.props.removeUpdateStage()
+    }
+
+    componentWillMount() {
+        this.setProgramToUpdate()
+    }
+
     render() {
         if (!this.props.isLoggedIn) {
             return <Redirect to="/" />
@@ -90,6 +134,9 @@ export default class ProgramConstructor extends Component<IProgramConstructorPro
 
         const {program: {exercises}, href} = this.state;
 
+        const {userProgramToUpdate} = this.props;
+
+        const logicButton = Object.keys(userProgramToUpdate).length > 0 ? <button onClick={() => this.editProgram()}>Обновить программу</button> : <button onClick={() => this.makeProgram()}>Сделать программу</button>
 
         const exercisesHtml = exercises.map((exercise: Exercise, index: number) => <div key={index}><p style={{display: "inline-block"}} >{exercise.title}</p>&nbsp;&nbsp;<span onClick={() => this.removeExercise(index)} style={{color: "red", fontWeight: "bold", display: "inline-block", cursor: "pointer"}}>X</span></div>);
 
@@ -99,8 +146,8 @@ export default class ProgramConstructor extends Component<IProgramConstructorPro
                     <input style={{width: "400px"}} value={this.state.program.title} placeholder="Введите имя программы" onChange={evt => this.updateProgramTitle(evt)}/>
                     <br/>
                     {exercisesHtml}
-                    <button onClick={() => this.makeProgram()}>Сделать программу</button><br/>
-                    <Link to="/">Назад на главную</Link>
+                    {logicButton}<br/>
+                    <Link onClick={() => this.removeUpdateStage()} to="/">Назад на главную</Link>
                 </div>
                 <div>
                     <div>
@@ -112,8 +159,6 @@ export default class ProgramConstructor extends Component<IProgramConstructorPro
                             <li><a onClick={(e: any) => this.getHref(e)} href="#" data-href="arms">Руки</a></li>
                             <li><a onClick={(e: any) => this.getHref(e)} href="#" data-href="shoulders">Плечи</a></li>
                             <li><a onClick={(e: any) => this.getHref(e)} href="#" data-href="legs">Ноги</a></li>
-                            {/*<li><NavLink to="/program_constructor/">Назад к выбору группы мышц</NavLink></li>*/}
-                            {/*{routesHtml}*/}
                             <ExercisesSection href={href} getExercise={(exercise: Exercise) => this.getExercise(exercise)} />
                         </ul>
                     </div>

@@ -4,7 +4,7 @@ import { middleware as body } from 'bodymen'
 import { password as passwordAuth, master, token } from '../../services/passport'
 import {
   index, showMe, show, create, update, updatePassword, destroy, debugSignUp, debugIsLoggedIn, showMyPrograms,
-  createMyProgram
+  createMyProgram, updateMyProgram
 } from './controller'
 import { schema } from './model'
 export User, { schema } from './model'
@@ -146,6 +146,14 @@ router.post('/:id/my_programs',
 router.get('/:id/my_programs',
   token({required: true}),
   showMyPrograms)
+
+/**
+ * PUT /:id/my_programs
+ * Update a program for the user
+ */
+/*router.put('/:id/my_programs',
+  token({required: true}),
+  updateMyProgram)*/
 
 // /**
 //  * GET /:id/my_programs/:id (of the program)

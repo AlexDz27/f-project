@@ -12,7 +12,7 @@ interface IProgramPageProps {
     match: any
     isLoggedIn: boolean
     getNewUserDataAfterEditProgram: Function
-    toBeUpdated: string
+    toBeUpdatedInfo: Function
 }
 
 interface IProgramPageStates {
@@ -64,9 +64,9 @@ export default class ProgramPage extends Component<IProgramPageProps, IProgramPa
             })
     }
 
-    // toggleToBeUpdated(val: string) {
-    //     this.props.toBeUpdated(val)
-    // }
+    toggleToBeUpdated() {
+        this.props.toBeUpdatedInfo(this.state.userProgram)
+    }
 
     componentWillMount() {
         this.getProgramFromServer()
@@ -99,7 +99,7 @@ export default class ProgramPage extends Component<IProgramPageProps, IProgramPa
                     {exercisesTemplate}
                 </ul>
                 <a onClick={(e: any) => this.deleteProgram(e)} style={{color: "red"}} href="#">Удалить программу</a><br/>
-                <Link style={{color: "green"}} to="/program_constructor">Редактировать</Link><br/>
+                <Link onClick={() => this.toggleToBeUpdated()} data-update="true" style={{color: "green"}} to="/program_constructor">Редактировать</Link><br/>
                 <Link to="/">Назад на главную</Link>
             </div>
         )

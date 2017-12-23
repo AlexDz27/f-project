@@ -74,6 +74,31 @@ exports.deleteOneProgram = (req, res, next) => {
     .catch(next);
 };
 
+exports.updateOneProgram = (req, res, next) => {
+/*  Program.findById(req.params.id, (err, program) => {
+    if (err) return res.json(err)
+
+    program.title = req.body.title;
+    program.exercises = req.body.exercises;
+
+    program.save((err, updatedProgram) => {
+      if (err) return res.json(err)
+
+      res.json(updatedProgram)
+    })
+  })*/
+  Promise.all([Program.findById(req.params.id), User.findOne({programs: {$elemMatch: {_id: req.params.id}}})])
+    .then(([program, user]) => {
+      program.title = req.body.title;
+      program.exercises = req.body.exercises;
+
+      program.save()
+      return user.save()
+    })
+    .then(success(res, 200))
+    .catch(next);
+}
+
 
 exports.showAllPrograms = (req, res) => {
   Program.find({}, (err, programs) => {
