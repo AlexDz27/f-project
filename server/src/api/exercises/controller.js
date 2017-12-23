@@ -107,14 +107,14 @@ export const getLegs = (req, res) => {
   })
 }
 
-// export const setup = (req, res) => {
-//   const newExercise = new Exercise({
-//     title: "Рвзодки глей",
-//     content: "раз разд",
-//     group: "Shoulders"
-//   })
-//   newExercise.save()
-//
-//   res.json(newExercise)
-// }
+export const setup = (req, res) => {
+  const newExercise = new Exercise({
+    title: "Тяга рог блока",
+    content: `<ul><ol>Тянем вверх</ol><ol>Тянем к себе</ol></ul>`,
+    group: "Shoulders"
+  })
+  newExercise.save()
+
+  res.json(newExercise)
+}
 

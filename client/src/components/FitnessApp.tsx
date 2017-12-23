@@ -13,27 +13,14 @@ export interface IFitnessAppProps {
     userData?: UserData | any
 }
 
-export interface IFitnessAppStates {
-    userLoggedIn: boolean
-}
-
-export default class FitnessApp extends Component<IFitnessAppProps, IFitnessAppStates> {
-    constructor(props: any) {
-        super(props);
-
-        this.state = {
-            userLoggedIn: false
-        }
-    }
-
-
+export default class FitnessApp extends Component<IFitnessAppProps, {}> {
     render() {
         const {isLoggedIn, userData} = this.props;
 
         let titles;
         if (isLoggedIn && Object.keys(userData).length > 0) {
             titles = userData.programs
-                .map((program: Program) => <Link key={program.id} style={{fontSize: '24px', marginRight: '10px', marginBottom: '5px',display: 'block', width: "190px", height: "190px", backgroundColor: "#28a745", color: "yellow", padding: "60px 0", textAlign: "center"}} to={`/programs/${program.id}`}>{program.title}</Link>)
+                .map((program: Program) => <Link key={program.id} className="prog-square" to={`/programs/${program.id}`}>{program.title}</Link>)
         } else {
             titles = <h3>Кажется, вас нет в системе! <Link to="/signup">Зарегистрируйтесь </Link>или <Link to="/signin">войдите!</Link></h3>
         }

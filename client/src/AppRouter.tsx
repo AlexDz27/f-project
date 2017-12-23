@@ -1,7 +1,7 @@
 import * as React from 'react'
 import {Component} from "react";
 import {BrowserRouter} from "react-router-dom"
-import {Switch, Route, withRouter} from "react-router"
+import {Switch, Route} from "react-router"
 import SignIn from "./components/SignIn";
 import SignUp from "./components/SignUp";
 import FitnessApp from "./components/FitnessApp";
@@ -11,6 +11,7 @@ import axios from 'axios'
 import {Program, UserData} from './types/index'
 import ProgramConstructor from "./components/ProgramConstructor";
 import ProgramPage from "./components/ProgramPage";
+import ProfilePage from "./components/ProfilePage";
 
 
 export function getUserToken() {
@@ -19,20 +20,17 @@ export function getUserToken() {
 }
 
 export interface IAppRouterStates {
-    userData?: UserData | any
+    userData: UserData | any
     isLoggedIn: boolean
-    toBeUpdated: boolean
-    userProgramToUpdate?: Program | any //todo: is there any need in any????
+    userProgramToUpdate: Program | any
 }
 
 export default class AppRouter extends Component<{}, IAppRouterStates> {
     constructor(props: any) {
         super(props);
-        //todo: mb mne ne nado toBeUpdated
         this.state = {
             isLoggedIn: false,
             userData: {},
-            toBeUpdated: false,
             userProgramToUpdate: {}
         }
 
@@ -41,8 +39,7 @@ export default class AppRouter extends Component<{}, IAppRouterStates> {
     }
 
     checkIfLoggedIn() {
-        const userToken = getUserToken();
-        if (userToken) {
+        if (getUserToken()) {
             this.setState({
                 isLoggedIn: true
             })
@@ -50,13 +47,12 @@ export default class AppRouter extends Component<{}, IAppRouterStates> {
     }
 
     getUserData() {
-        const userToken = getUserToken();
-        if (!userToken) {
+        if (!getUserToken()) {
             return
         } else {
             axios.get('http://localhost:9000/api/users/check/', {
                 'headers': {
-                    'Authorization': 'Bearer ' + userToken
+                    'Authorization': 'Bearer ' + getUserToken()
                 }
             })
 
@@ -85,14 +81,12 @@ export default class AppRouter extends Component<{}, IAppRouterStates> {
 
     toBeUpdatedInfo(userProgramToUpdate: Program) {
         this.setState({
-            toBeUpdated: true,
             userProgramToUpdate: userProgramToUpdate
         })
     }
 
     removeUpdateStage() {
         this.setState({
-            toBeUpdated: false,
             userProgramToUpdate: {}
         })
     }
@@ -103,8 +97,6 @@ export default class AppRouter extends Component<{}, IAppRouterStates> {
     }
 
     render() {
-        // console.log(this.props);
-
         const {isLoggedIn, userData} = this.state;
 
             //TODO: see to removeing token, need promises probably, or just leave it as is.............
@@ -125,9 +117,21 @@ export default class AppRouter extends Component<{}, IAppRouterStates> {
 
                     <Route exact={true} path="/signin" render={() => <SignIn getUserDataFromSignIn={(res: any) => this.getUserDataFromSignIn(res)} isLoggedIn={isLoggedIn} />} />
 
-                    <Route exact={true} path="/program_constructor/" render={(props: any) => <ProgramConstructor onAddProgram={(newUserData: UserData) => this.getNewUserDataAfterEditProgram(newUserData)} userData={userData} isLoggedIn={isLoggedIn} userProgramToUpdate={this.state.userProgramToUpdate} removeUpdateStage={() => this.removeUpdateStage()} {...props} />} />
+                    <Route exact={true} path="/me" render={() => <ProfilePage userData={userData} />} />
 
-                    <Route exact={true} path="/programs/:id" render={(props: any) => <ProgramPage getNewUserDataAfterEditProgram={(newUserData: UserData) => this.getNewUserDataAfterEditProgram(newUserData)} isLoggedIn={isLoggedIn} toBeUpdatedInfo={(userProgramToUpdate: Program) => this.toBeUpdatedInfo(userProgramToUpdate)} {...props} />} />
+                    <Route exact={true} path="/program_constructor/" render={(props: any) => <ProgramConstructor
+                        onAddProgram={(newUserData: UserData) => this.getNewUserDataAfterEditProgram(newUserData)}
+                        userData={userData}
+                        isLoggedIn={isLoggedIn}
+                        userProgramToUpdate={this.state.userProgramToUpdate}
+                        removeUpdateStage={() => this.removeUpdateStage()}
+                        {...props} />} />
+
+                    <Route exact={true} path="/programs/:id" render={(props: any) => <ProgramPage
+                        getNewUserDataAfterEditProgram={(newUserData: UserData) => this.getNewUserDataAfterEditProgram(newUserData)}
+                        isLoggedIn={isLoggedIn}
+                        toBeUpdatedInfo={(userProgramToUpdate: Program) => this.toBeUpdatedInfo(userProgramToUpdate)}
+                        {...props} />} />
 
                     <Route exact={true} path="*" render={() => <h1>404 page not found (route for a page)</h1>} />
                 </Switch>
@@ -135,5 +139,3 @@ export default class AppRouter extends Component<{}, IAppRouterStates> {
         )
     }
 }
-
-withRouter(AppRouter)

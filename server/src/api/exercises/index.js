@@ -28,7 +28,7 @@ router.get('/shoulders', getShoulders)
 
 router.get('/legs', getLegs)
 
-// router.get('/setup', setup)
+router.get('/setup', setup)
 
 
 module.exports = router

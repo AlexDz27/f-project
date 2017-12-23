@@ -21,7 +21,7 @@ export interface ISignInStates {
 
 
 export default class SignIn extends Component<ISignInProps, ISignInStates> {
-    constructor(props: any) {
+    constructor(props: ISignInProps) {
         super(props);
 
         this.state = {
@@ -33,13 +33,13 @@ export default class SignIn extends Component<ISignInProps, ISignInStates> {
 
     handleUsernameCheckChange(e: any) {
         this.setState({
-            newUserNameCheck: e.target.value //was newUserName for some reason
+            newUserNameCheck: e.target.value
         })
     }
 
     handlePasswordCheckChange(e: any) {
         this.setState({
-            newUserPasswordCheck: e.target.value //was newUserPassword for some reason
+            newUserPasswordCheck: e.target.value
         })
     }
 
@@ -47,7 +47,7 @@ export default class SignIn extends Component<ISignInProps, ISignInStates> {
         const {newUserNameCheck, newUserPasswordCheck} = this.state;
 
         e.preventDefault();
-        axios.request({url:'http://localhost:9000/api/auth',method:'post',auth: {
+        axios.request({url:'http://localhost:9000/api/auth',method:'post', auth: {
             username: newUserNameCheck,
             password: newUserPasswordCheck
         }})

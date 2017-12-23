@@ -86,8 +86,9 @@ export default class ProgramPage extends Component<IProgramPageProps, IProgramPa
         let exercisesTemplate;
         if (userProgram) {
             exercisesTemplate = userProgram.exercises.map((item: Exercise, index: number) => {
+                console.log(item.content);
                 return(
-                    <li key={index}>{item.title}<br/><small>{item.content}</small></li>
+                    <h5 key={index}>{item.title}<br/><small>{item.content}</small></h5>
                 )
             })
         }

@@ -1,7 +1,6 @@
 .FitnessApp {
     width: 900px;
     margin: 0 auto;
-    border: 1px solid blue;
 }
 
 .pc-ul a:focus {
@@ -12,4 +11,31 @@
 .activeA {
     color: green;
     font-weight: bold;
+}
+
+.prog-square {
+    font-size: 24px;
+    margin-right: 10px;
+    margin-bottom: 5px;
+    display: block;
+    width: 190px;
+    height: 190px;
+    background-color: #28a745;
+    color: yellow;
+    padding: 60px 0;
+    text-align: center;
+}
+
+.x {
+    color: red;
+    font-weight: bold;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.const-menu {
+    display: flex;
+    width: 70%;
+    margin: 0 auto;
+    justify-content: space-around;
 }

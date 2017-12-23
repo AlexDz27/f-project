@@ -19,11 +19,11 @@ export interface IProgramConstructorStates {
 }
 
 export interface IProgramConstructorProps {
-    userData?: UserData | any
+    userData: UserData
     exercisesFromServer: Array<Exercise>
     onAddProgram: Function
     isLoggedIn: boolean
-    userProgramToUpdate?: Program | any
+    userProgramToUpdate: Program | any
     removeUpdateStage: Function
 }
 
@@ -60,14 +60,13 @@ export default class ProgramConstructor extends Component<IProgramConstructorPro
     }
 
     makeProgram() {
-        const userToken = getUserToken() //todo: mb ne nado userToken, prosto getUserToken()
         const newProgram: Program = new Program(this.state.program.title, this.state.program.exercises)
         axios.post(`http://localhost:9000/api/users/${this.props.userData._id}/my_programs`, newProgram, {
             'headers': {
-                'Authorization': 'Bearer ' + userToken
+                'Authorization': 'Bearer ' + getUserToken()
             }
         })
-            .then((res: any) => this.props.onAddProgram(res.data)) //todo: any int of UesrDAta
+            .then((res: any) => this.props.onAddProgram(res.data))
             .then(() => alert(`Ваша программа ${this.state.program.title} успешно добавлена!`)) //todo:mod int alert
             .then(() => this.setState({
                 redirectAfterMakeProgram: true
@@ -82,7 +81,9 @@ export default class ProgramConstructor extends Component<IProgramConstructorPro
                 'Authorization': 'Bearer ' + getUserToken()
             }
         })
-            // .then((res: any) => this.props.onAddProgram(res.data))
+/*
+            .then((res: any) => this.props.onAddProgram(res.data))
+*/
             .then(() => alert(`Ваша программа ${this.state.program.title} успешно обновлена!`))
             .then(() => this.setState({
                 redirectAfterMakeProgram: true
@@ -138,12 +139,25 @@ export default class ProgramConstructor extends Component<IProgramConstructorPro
 
         const logicButton = Object.keys(userProgramToUpdate).length > 0 ? <button onClick={() => this.editProgram()}>Обновить программу</button> : <button onClick={() => this.makeProgram()}>Сделать программу</button>
 
-        const exercisesHtml = exercises.map((exercise: Exercise, index: number) => <div key={index}><p style={{display: "inline-block"}} >{exercise.title}</p>&nbsp;&nbsp;<span onClick={() => this.removeExercise(index)} style={{color: "red", fontWeight: "bold", display: "inline-block", cursor: "pointer"}}>X</span></div>);
+        const exercisesHtml = exercises.map((exercise: Exercise, index: number) => <div key={index}><h4
+            style={{display: "inline-block"}} >
+                {exercise.title}
+            </h4>
+            &nbsp;&nbsp;
+            <span onClick={() => this.removeExercise(index)}
+                  className="x">
+                X
+            </span>
+        </div>);
 
         return (
-            <div style={{display: "flex", width: "70%", margin: "0 auto", justifyContent: "space-around"}}>
+            <div className="const-menu">
                 <div>
-                    <input style={{width: "400px"}} value={this.state.program.title} placeholder="Введите имя программы" onChange={evt => this.updateProgramTitle(evt)}/>
+                    <input style={{width: "400px"}}
+                           value={this.state.program.title}
+                           placeholder="Введите имя программы"
+                           onChange={evt => this.updateProgramTitle(evt)}
+                    />
                     <br/>
                     {exercisesHtml}
                     {logicButton}<br/>

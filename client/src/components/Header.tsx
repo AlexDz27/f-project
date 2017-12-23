@@ -3,6 +3,7 @@ import {Component} from "react";
 
 import "./components-styles/Header.css"
 import {UserData} from "../types/index";
+import {Link} from "react-router-dom";
 
 
 export interface IHeaderProps {
@@ -23,7 +24,7 @@ export default class Header extends Component<IHeaderProps, {}> {
             <header className="Header header">
                 <span className="Header__initials display-4">Fitness App</span>
                 <span className="Header__initials">Добро пожаловать,
-                    <span style={{color: "green"}}>{isLoggedIn && userData ? ` ${userData.username}` : " Anonymous"}</span>
+                    <Link to="/me" style={{color: "green"}}>{isLoggedIn && userData ? ` ${userData.username}` : " Anonymous"}</Link>
                 </span>
                 <div className="user-bar">
                     {isLoggedIn ? <a onClick={() => this.handleLogout()} href="/">Выйти</a> : <div><a href="/signin">Войти</a> <a href="/signup">Регистрация</a></div>}
