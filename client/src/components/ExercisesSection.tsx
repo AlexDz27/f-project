@@ -1,6 +1,8 @@
 import * as React from 'react';
 import {Component} from "react";
 
+import {withRouter} from 'react-router'
+
 import "./components-styles/FitnessApp.css"
 
 import ExerciseItem from "./ExerciseItem";
@@ -74,3 +76,5 @@ export default class ExercisesSection extends Component<IExercisesSectionProps, 
         
     }
 }
+
+withRouter(ExercisesSection)

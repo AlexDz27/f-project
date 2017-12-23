@@ -2,7 +2,7 @@ const exercisesController = require('./controller')
 const Exercise = require('./model');
 
 import {
-  getAll, getChest
+  getAll, getChest, getLegs
 } from './controller'
 
 const express = require('express');
@@ -20,7 +20,9 @@ router.get('/', getAll)
 
 router.get('/chest', getChest)
 
-// router.get('/setup', setupLegs)
+router.get('/legs', getLegs)
+
+// router.get('/setup', setup)
 
 
 module.exports = router

@@ -45,7 +45,8 @@ const config = {
   },
   development: {
     mongo: {
-      uri: 'mongodb://localhost/project',
+      // uri: 'mongodb://localhost/project',
+      uri: 'mongodb://localhost/f-project',
       // uri: 'mongodb://AlexDz:sliltarybary1488@ds129926.mlab.com:29926/zellwk',
       options: {
         debug: true

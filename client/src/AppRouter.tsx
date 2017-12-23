@@ -23,7 +23,6 @@ export interface IAppRouterStates {
     isLoggedIn: boolean
 }
 
-
 export default class AppRouter extends Component<{}, IAppRouterStates> {
     constructor(props: any) {
         super(props);
