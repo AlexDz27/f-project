@@ -1,6 +1,3 @@
-const exercisesController = require('./controller')
-const Exercise = require('./model');
-
 import {
   getAll, getArms, getBack, getChest, getLegs, getShoulders, setup
 } from './controller'
@@ -17,6 +14,13 @@ const router = express.Router();
  */
 
 router.get('/', getAll)
+
+/**
+ * api/...
+ * exercises/:part
+ * GET
+ * Get particular exercises which belong to a specified group from db
+ */
 
 router.get('/chest', getChest)
 

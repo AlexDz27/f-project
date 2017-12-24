@@ -1,6 +1,6 @@
 import { Router } from 'express'
-import {login, loginDebug} from './controller'
-import { password, master } from '../../services/passport'
+import {login} from './controller'
+import { password } from '../../services/passport'
 
 const router = new Router()
 

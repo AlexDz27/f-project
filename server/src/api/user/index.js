@@ -1,9 +1,10 @@
 import { Router } from 'express'
 import { middleware as query } from 'querymen'
 import { middleware as body } from 'bodymen'
-import { password as passwordAuth, master, token } from '../../services/passport'
+import {token} from "../../services/passport/index";
+
 import {
-  index, showMe, show, create, update, updatePassword, destroy, debugSignUp, debugIsLoggedIn, showMyPrograms,
+  index, showMe, show, signUp, isLoggedIn , showMyPrograms,
   createMyProgram, updateMyProgram
 } from './controller'
 import { schema } from './model'
@@ -11,7 +12,7 @@ export User, { schema } from './model'
 const User = require('./model');
 
 const router = new Router()
-const { email, password, username, picture, role } = schema.tree
+const { email, password, username } = schema.tree
 
 /**
  * @api {get} /users Retrieve users
@@ -40,14 +41,9 @@ router.get('/me',
   token({ required: true }),
   showMe)
 
-//todo: add funcg from controller
 router.get('/check',
   token({ required: true }),
-  function(req, res, next){
-  const {_id,email, username, programs} = req.user;
-    return res.json({_id,email, username, programs});
-  },
-  )
+  isLoggedIn)
 
 /**
  * @api {get} /users/:id Retrieve user
@@ -79,59 +75,11 @@ router.get('/:id',
  */
 router.post('/',
   body({ email, password, username }),
-  debugSignUp)
+  signUp)
 
-
-
-// /**
-//  * @api {put} /users/:id Update user
-//  * @apiName UpdateUser
-//  * @apiGroup User
-//  * @apiPermission user
-//  * @apiParam {String} access_token User access_token.
-//  * @apiParam {String} [name] User's name.
-//  * @apiParam {String} [picture] User's picture.
-//  * @apiSuccess {Object} user User's data.
-//  * @apiError {Object} 400 Some parameters may contain invalid values.
-//  * @apiError 401 Current user or admin access only.
-//  * @apiError 404 User not found.
-//  */
-// router.put('/:id',
-//   token({ required: true }),
-//   body({ name, picture }),
-//   update)
-//
-// /**
-//  * @api {put} /users/:id/password Update password
-//  * @apiName UpdatePassword
-//  * @apiGroup User
-//  * @apiHeader {String} Authorization Basic authorization with email and password.
-//  * @apiParam {String{6..}} password User's new password.
-//  * @apiSuccess (Success 201) {Object} user User's data.
-//  * @apiError {Object} 400 Some parameters may contain invalid values.
-//  * @apiError 401 Current user access only.
-//  * @apiError 404 User not found.
-//  */
-// router.put('/:id/password',
-//   passwordAuth(),
-//   body({ password }),
-//   updatePassword)
-//
-// /**
-//  * @api {delete} /users/:id Delete user
-//  * @apiName DeleteUser
-//  * @apiGroup User
-//  * @apiPermission admin
-//  * @apiParam {String} access_token User access_token.
-//  * @apiSuccess (Success 204) 204 No Content.
-//  * @apiError 401 Admin access only.
-//  * @apiError 404 User not found.
-//  */
-// router.delete('/:id',
-//   token({ required: true, roles: ['admin'] }),
-//   destroy)
 
 /**PROGRAMS SECTION /users/...SOME_URL...  LISTED DOWN BELOW **/
+
 /**
  * POST /:id/my_programs
  * CREATE a program for the user
@@ -155,13 +103,5 @@ router.get('/:id/my_programs',
 /*router.put('/:id/my_programs',
   token({required: true}),
   updateMyProgram)*/
-
-// /**
-//  * GET /:id/my_programs/:id (of the program)
-//  * Get one program for the user
-//  */
-// router.get('/:id/my_programs/:id', //-??????????????????????????????????????????????? как тут два айдишника различать??? чтобы достучаться до проги юзера
-//   token({required: true}),
-//   showMyPrograms)
 
 export default router
