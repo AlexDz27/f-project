@@ -1,11 +1,6 @@
 import {success, notFound} from '../../services/response/'
 import {User} from '.'
 
-const LocalStorage = require('node-localstorage').LocalStorage;
-// localStorage = new LocalStorage('./scratch');
-
-// const programsController = require('../programs/controller');
-
 const Program = require('../programs/model');
 
 export const index = ({querymen: {query, select, cursor}}, res, next) =>

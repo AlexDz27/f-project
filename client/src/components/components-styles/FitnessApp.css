@@ -3,12 +3,13 @@
     margin: 0 auto;
 }
 
-.pc-ul a:focus {
-    color: green;
-    font-weight: bold;
-}
+/*.pc-ul a:focus {*/
+    /*color: green;*/
+    /*font-weight: bold;*/
+/*}*/
 
 .activeA {
+    font-size: 24px;
     color: green;
     font-weight: bold;
 }

@@ -24,7 +24,7 @@ const { email, password, username, picture, role } = schema.tree
  * @apiError {Object} 400 Some parameters may contain invalid values.
  * @apiError 401 Admin access only.
  */
-router.get('/', //todo: add admin token for showing
+router.get('/',
   query(),
   index)
 
@@ -40,6 +40,7 @@ router.get('/me',
   token({ required: true }),
   showMe)
 
+//todo: add funcg from controller
 router.get('/check',
   token({ required: true }),
   function(req, res, next){

@@ -81,6 +81,7 @@ export default class ProgramConstructor extends Component<IProgramConstructorPro
                 'Authorization': 'Bearer ' + getUserToken()
             }
         })
+        //todo: see to editing a program
 /*
             .then((res: any) => this.props.onAddProgram(res.data))
 */
@@ -102,6 +103,14 @@ export default class ProgramConstructor extends Component<IProgramConstructorPro
         this.setState({
             href: e.target.getAttribute("data-href")
         })
+
+        const anchors = document.querySelectorAll('a[data-href]')
+        for (let i = 0; i < anchors.length; i++) {
+            if (anchors[i].classList.contains('activeA')) {
+                anchors[i].classList.remove('activeA');
+            }
+            e.target.classList.add('activeA')
+        }
     }
 
     setProgramToUpdate() {
@@ -165,7 +174,7 @@ export default class ProgramConstructor extends Component<IProgramConstructorPro
                 </div>
                 <div>
                     <div>
-                        <ul className="pc-ul" style={{listStyleType: 'none', padding: 0}}>
+                        <ul style={{listStyleType: 'none', padding: 0}}>
                             <h1>Упражнения</h1>
                             <h6>Выберите группу мышц</h6>
                             <li><a onClick={(e: any) => this.getHref(e)} href="#" data-href="chest">Грудь</a></li>
