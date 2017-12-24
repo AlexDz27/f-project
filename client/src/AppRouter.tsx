@@ -99,15 +99,6 @@ export default class AppRouter extends Component<{}, IAppRouterStates> {
     render() {
         const {isLoggedIn, userData} = this.state;
 
-            //TODO: see to removeing token, need promises probably, or just leave it as is.............
-/*        if (isLoggedIn && Object.keys(userData).length === 0) {
-            localStorage.removeItem("token")
-            this.setState({
-                isLoggedIn: false
-            })
-        }*/
-
-
         return(
             <BrowserRouter>
                 <Switch>
