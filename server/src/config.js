@@ -46,8 +46,9 @@ const config = {
   development: {
     mongo: {
       // uri: 'mongodb://localhost/project',
-      uri: 'mongodb://localhost/f-project',
+      // uri: 'mongodb://localhost/f-project',
       // uri: 'mongodb://AlexDz:sliltarybary1488@ds129926.mlab.com:29926/zellwk',
+      uri: 'mongodb://AlexDz:sliltarybary1488@ds055782.mlab.com:55782/intetics-final-project',
       options: {
         debug: true
       }
