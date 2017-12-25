@@ -75,7 +75,8 @@ export default class AppRouter extends Component<{}, IAppRouterStates> {
 
     getNewUserDataAfterEditProgram(newUserData: UserData) {
         this.setState({
-            userData: newUserData
+            userData: newUserData,
+            userProgramToUpdate: {}
         })
     }
 

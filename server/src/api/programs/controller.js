@@ -33,32 +33,26 @@ exports.deleteOneProgram = (req, res, next) => {
 };
 
 exports.updateOneProgram = (req, res, next) => {
-/*  Program.findById(req.params.id, (err, program) => {
-    if (err) return res.json(err)
-
-    program.title = req.body.title;
-    program.exercises = req.body.exercises;
-
-    program.save((err, updatedProgram) => {
-      if (err) return res.json(err)
-
-      res.json(updatedProgram)
-    })
-  })*/
   Promise.all([Program.findById(req.params.id), User.findOne({programs: {$elemMatch: {_id: req.params.id}}})])
     .then(([program, user]) => {
       program.title = req.body.title;
       program.exercises = req.body.exercises;
-
       program.save()
-      return user.save()
+
+      /** finding the program we want to remove, remove it and add an updated one via SPLICE **/
+      const prog = user.programs.id(req.params.id)
+      const index = user.programs.indexOf(prog);
+      user.programs.splice(index, 1, program)
+
+      user.save()
+      return user
     })
     .then(success(res, 200))
-    .catch(next);
+    .catch(next)
 }
 
 
-exports.showAllPrograms = (req, res) => {
+exports.showAllPrograms = (req, res, next) => {
   Program.find({})
     .then(notFound(res))
     .then(success(res))
