@@ -1,18 +1,8 @@
 import {success, notFound} from '../../services/response/'
-import {Programs} from '.'
 import mongoose from 'mongoose'
 
 const Program = require('./model');
 const User = require('../user/model');
-
-//todo: mb nado uldali't
-export const update = ({bodymen: {body}, params}, res, next) =>
-  Programs.findById(params.id)
-    .then(notFound(res))
-    .then((programs) => programs ? Object.assign(programs, body).save() : null)
-    .then((programs) => programs ? programs.view(true) : null)
-    .then(success(res))
-    .catch(next)
 
 /** MY CODE **/
 export const showOneProgram = ({params}, res, next) =>
