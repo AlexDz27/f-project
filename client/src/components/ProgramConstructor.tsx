@@ -67,7 +67,7 @@ export default class ProgramConstructor extends Component<IProgramConstructorPro
             }
         })
             .then((res: any) => this.props.onAddProgram(res.data))
-            .then(() => alert(`Ваша программа ${this.state.program.title} успешно добавлена!`)) //todo:mod int alert
+            .then(() => alert(`Ваша программа ${this.state.program.title} успешно добавлена!`))
             .then(() => this.setState({
                 redirectAfterMakeProgram: true
             }))

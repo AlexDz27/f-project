@@ -61,7 +61,7 @@ export default class ExercisesSection extends Component<IExercisesSectionProps, 
                 <ExerciseItem onClick={(exercise: Exercise) => this.getInfo(exercise)} key={index} exercise={exercise} />
             )
         })
-        //todo: add switch, у меня чето не полчуается
+
         if (href === 'chest' || href === 'back' || href === 'arms' || href === 'shoulders' || href === 'legs') {
             return(
                 <div>
